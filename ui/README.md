@@ -28,6 +28,24 @@ Claims over £1,000 (CLM-2026-004861, CLM-2026-004791) sit in the Review queue f
 - `/payouts` Payout ledger
 - `/library` Policy documents
 
+## Running with the real backend
+
+The live demo claim (CLM-2026-004817) is wired to the Python pipeline and Stripe test mode through `server/app.py`. Next.js proxies `/api/*` to it (`next.config.ts`, override with `BACKEND_URL`).
+
+```bash
+# terminal 1, repo root: the claims API (pipeline + Cognee + Stripe)
+.venv-claims/bin/uvicorn server.app:app --port 8000
+# terminal 2
+cd ui && npm run dev
+```
+
+1. **Once:** Test mode → **Prepare claim (full agent run)**. The real agents read every document except the held-back evidence and stop at WAITING. A snapshot of that state is saved under `runs/_demo_snapshots/`.
+2. **Simulate customer reply** sends the held-back documents to the pipeline. The replay animation plays but holds at the end until the real run finishes. Then line items, authority checks, fraud score and the Payment tab switch to the real decision and the real Stripe transfer (with a Dashboard link).
+3. **Live run** tab: the pipeline's own event log, streamed. **Ask why** has a free-text box answered from Cognee memory.
+4. **Reset demo** reverses the claim's Stripe transfers (`scripts/reset_demo_payments.py`) and restores the WAITING snapshot, so the next take pays fresh.
+
+If the API is down, the console falls back to the mock data below.
+
 ## Where to plug in the backend
 
 - `lib/types.ts` is the shape the UI expects: claims, episodes (evidence arrivals), agent runs and trace steps, findings, citations, evidence requests, emails.

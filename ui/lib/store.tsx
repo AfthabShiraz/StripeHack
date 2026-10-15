@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { CLAIMS, LIVE_CLAIM_ID } from "./data";
+import { applyLive, backend, type LiveState } from "./backend";
+import { CLAIMS, LIVE_CLAIM_ID, getClaim } from "./data";
 import type { Claim, ClaimStatus, LogEvent } from "./types";
 
 export interface Decision {
@@ -23,6 +24,10 @@ interface Store {
   decline: (claim: Claim, note: string) => void;
   spawn: () => void;
   resetDemo: () => void;
+  /** latest backend state for the live claim; null while the API is unreachable */
+  live: LiveState | null;
+  backendError: string | null;
+  prepare: () => void;
 }
 
 const StoreContext = createContext<Store | null>(null);
@@ -67,6 +72,31 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [now, setNow] = useState(() => Date.now());
   const [spawnedAt, setSpawnedAt] = useState<number | null>(null);
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
+  const [live, setLive] = useState<LiveState | null>(null);
+  const [backendError, setBackendError] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      setLive(await backend.live(LIVE_CLAIM_ID));
+    } catch {
+      setLive(null);
+    }
+  }, []);
+
+  // Poll the backend: fast while a run is going, slowly otherwise.
+  useEffect(() => {
+    let stop = false;
+    let timer = 0;
+    const tick = async () => {
+      await refresh();
+      if (!stop) timer = window.setTimeout(tick, 1500);
+    };
+    tick();
+    return () => {
+      stop = true;
+      window.clearTimeout(timer);
+    };
+  }, [refresh]);
 
   useEffect(() => {
     // Restore demo state after mount so the static HTML matches the first client render.
@@ -118,15 +148,37 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const t = Date.now();
     setSpawnedAt(t);
     writeJSON("session", SPAWN_KEY, t);
-  }, []);
+    setBackendError(null);
+    // The customer's reply arrives: hand every pending document to the real pipeline.
+    backend
+      .evidence(LIVE_CLAIM_ID)
+      .then(refresh)
+      .catch((e: Error) => setBackendError(`Backend run not started: ${e.message}`));
+  }, [refresh]);
 
   const resetDemo = useCallback(() => {
     setSpawnedAt(null);
     writeJSON("session", SPAWN_KEY, null);
     save({});
-  }, [save]);
+    setBackendError(null);
+    backend
+      .reset(LIVE_CLAIM_ID)
+      .then(refresh)
+      .catch((e: Error) => setBackendError(`Backend reset failed: ${e.message}`));
+  }, [save, refresh]);
 
-  const value = useMemo(() => ({ now, spawnedAt, decisions, approve, decline, spawn, resetDemo }), [now, spawnedAt, decisions, approve, decline, spawn, resetDemo]);
+  const prepare = useCallback(() => {
+    setBackendError(null);
+    backend
+      .prepare(LIVE_CLAIM_ID)
+      .then(refresh)
+      .catch((e: Error) => setBackendError(`Backend prepare failed: ${e.message}`));
+  }, [refresh]);
+
+  const value = useMemo(
+    () => ({ now, spawnedAt, decisions, approve, decline, spawn, resetDemo, live, backendError, prepare }),
+    [now, spawnedAt, decisions, approve, decline, spawn, resetDemo, live, backendError, prepare],
+  );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
 
@@ -140,14 +192,31 @@ export function useStore() {
  * Milliseconds into the live agent run.
  * -1 while the demo claim waits on the customer; Infinity for claims with no live run.
  */
-function elapsedFor(claim: Claim, now: number, spawnedAt: number | null) {
+function elapsedFor(claim: Claim, now: number, spawnedAt: number | null, live: LiveState | null) {
   if (claim.id !== LIVE_CLAIM_ID) return Number.POSITIVE_INFINITY;
-  return spawnedAt === null ? -1 : Math.max(0, now - spawnedAt);
+  if (spawnedAt === null) return -1;
+  const elapsed = Math.max(0, now - spawnedAt);
+  // While the real pipeline is still working, hold the replay just short of its end.
+  if (live?.running) return Math.min(elapsed, claim.runLength - 1);
+  return elapsed;
 }
 
 export function useElapsed(claim: Claim) {
-  const { now, spawnedAt } = useStore();
-  return elapsedFor(claim, now, spawnedAt);
+  const { now, spawnedAt, live } = useStore();
+  return elapsedFor(claim, now, spawnedAt, live);
+}
+
+/** The claim, with the real backend decision laid over the mock once the live run has finished. */
+export function useClaim(id: string): Claim | undefined {
+  const { now, spawnedAt, live } = useStore();
+  const claim = getClaim(id);
+  if (!claim) return undefined;
+  return withLive(claim, now, spawnedAt, live);
+}
+
+function withLive(claim: Claim, now: number, spawnedAt: number | null, live: LiveState | null) {
+  if (claim.id !== LIVE_CLAIM_ID) return claim;
+  return elapsedFor(claim, now, spawnedAt, live) >= claim.runLength ? applyLive(claim, live) : claim;
 }
 
 export function statusOf(claim: Claim, elapsed: number, decision?: Decision): ClaimStatus {
@@ -170,9 +239,10 @@ export function useClaimState(claim: Claim) {
 }
 
 export function useAllClaimStates() {
-  const { decisions, now, spawnedAt } = useStore();
-  return CLAIMS.map((c) => {
-    const elapsed = elapsedFor(c, now, spawnedAt);
+  const { decisions, now, spawnedAt, live } = useStore();
+  return CLAIMS.map((raw) => {
+    const c = withLive(raw, now, spawnedAt, live);
+    const elapsed = elapsedFor(c, now, spawnedAt, live);
     const decision = decisions[c.id];
     return { claim: c, elapsed, decision, status: statusOf(c, elapsed, decision) };
   });

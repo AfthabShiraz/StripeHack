@@ -1,24 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { getClaim } from "@/lib/data";
+import { LIVE_CLAIM_ID } from "@/lib/data";
 import { citationCount, readyAt, visibleFindings } from "@/lib/live";
-import { claimLogs, useClaimState } from "@/lib/store";
+import { claimLogs, useClaim, useClaimState } from "@/lib/store";
 import { DocDrawer, type DrawerTarget } from "../doc-drawer";
 import { PageBody, Topbar } from "../shell/topbar";
 import { Tabs } from "../ui";
 import { AgentsTab } from "./agents";
 import { EmailsTab } from "./emails";
+import { LiveRunTab } from "./live-run";
 import { Banner, ClaimHeader, Stepper, SummaryStrip } from "./header";
 import { MemoryTab } from "./memory";
 import { ReviewTab } from "./review";
 import { AuthorityTab, ExplainTab, LinesTab, LogsTab, PaymentTab } from "./tabs";
 import { TimelineTab, visibleEmails } from "./timeline";
 
-type Tab = "timeline" | "review" | "agents" | "memory" | "emails" | "lines" | "authority" | "payment" | "logs" | "explain";
+type Tab = "live" | "timeline" | "review" | "agents" | "memory" | "emails" | "lines" | "authority" | "payment" | "logs" | "explain";
 
 export function ClaimView({ id }: { id: string }) {
-  const claim = getClaim(id)!;
+  const claim = useClaim(id)!;
   const { elapsed, decision, status, done } = useClaimState(claim);
   const hasTimeline = !!claim.episodes;
   const [tab, setTab] = useState<Tab>(hasTimeline ? "timeline" : "review");
@@ -51,6 +52,7 @@ export function ClaimView({ id }: { id: string }) {
   };
 
   const tabs: { id: Tab; label: string; count?: number }[] = [
+    ...(claim.id === LIVE_CLAIM_ID ? [{ id: "live" as Tab, label: "Live run" }] : []),
     ...(hasTimeline ? [{ id: "timeline" as Tab, label: "Timeline", count: claim.episodes!.length - (elapsed < 0 ? 1 : 0) }] : []),
     { id: "review", label: "Review", count: findings.length },
     { id: "agents", label: "Agents", count: hasTimeline ? undefined : claim.agents.length },
@@ -75,6 +77,7 @@ export function ClaimView({ id }: { id: string }) {
           <SummaryStrip claim={claim} status={status} done={done} decision={decision} findings={findings.length} citations={done ? citationCount(claim) : findings.reduce((n, f) => n + f.cites.length, 0)} />
           <Tabs<Tab> value={tab} onChange={(t) => { if (t === "agents") setRun(undefined); setTab(t); }} tabs={tabs} />
           <div>
+            {tab === "live" && <LiveRunTab />}
             {tab === "timeline" && <TimelineTab claim={claim} elapsed={elapsed} openDoc={setDrawer} onRun={openRun} onEmail={openEmail} onFinding={openFinding} onMemory={() => setTab("memory")} />}
             {tab === "review" && <ReviewTab claim={claim} findings={findings} status={status} done={done} focus={focus} />}
             {tab === "agents" && <AgentsTab claim={claim} elapsed={elapsed} run={run} onRun={setRun} openDoc={setDrawer} onFinding={openFinding} />}

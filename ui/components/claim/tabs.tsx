@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, Clock, MessageSquareText, XCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, ExternalLink, MessageSquareText, Send, XCircle } from "lucide-react";
 import { useState } from "react";
+import { backend, type Answer } from "@/lib/backend";
 import { money } from "@/lib/format";
-import type { Decision } from "@/lib/store";
+import { useStore, type Decision } from "@/lib/store";
 import type { Claim, ClaimStatus, LogEvent } from "@/lib/types";
 import type { DrawerTarget } from "../doc-drawer";
 import { Card, CardHeader, Clause, CopyId, KV, OutcomePill, Pill, cx } from "../ui";
@@ -228,6 +229,16 @@ export function PaymentTab({ claim, status, decision, ready, openDoc }: { claim:
             <KV k="Statement descriptor" v={p.reference} mono />
             <KV k="Idempotency key" v={p.idempotencyKey} mono />
             <KV k="Approved by" v={exists ? (decision?.by ?? p.approvedBy) : "—"} />
+            {exists && p.dashboardUrl && p.id !== "DRY_RUN" && (
+              <KV
+                k="Stripe"
+                v={
+                  <a href={p.dashboardUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary-ink hover:underline">
+                    View transfer in Dashboard <ExternalLink className="size-3" />
+                  </a>
+                }
+              />
+            )}
             <KV k="Created" v={exists ? (decision?.at ?? p.created ?? "—") : "—"} />
             {decision?.note && <KV k="Note" v={decision.note} />}
           </div>
@@ -317,7 +328,78 @@ export function LogsTab({ logs }: { logs: LogEvent[] }) {
   );
 }
 
+function AskBox({ claim, openDoc }: { claim: Claim; openDoc: (t: DrawerTarget) => void }) {
+  const { live } = useStore();
+  const [q, setQ] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [answer, setAnswer] = useState<{ q: string; a: Answer } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  if (!live) return null;
+  const submit = async () => {
+    const question = q.trim();
+    if (!question || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      setAnswer({ q: question, a: await backend.ask(claim.id, question) });
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Card className="p-5">
+      <div className="text-[12px] font-semibold uppercase tracking-wide text-muted">Ask the agent · answered from Cognee memory</div>
+      <form
+        className="mt-2 flex gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
+      >
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="e.g. Why did you pay £25.09 for the Sintra pharmacy receipt?"
+          className="h-9 min-w-0 flex-1 rounded-md border border-line px-3 text-[14px] outline-none focus:border-primary"
+        />
+        <button type="submit" disabled={busy || !q.trim()} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-primary px-3 text-[14px] font-medium text-white disabled:opacity-50">
+          <Send className="size-3.5" /> {busy ? "Thinking…" : "Ask"}
+        </button>
+      </form>
+      {error && <div className="mt-3 text-[13px] text-bad-ink">{error}</div>}
+      {answer && (
+        <div className="mt-4">
+          <div className="text-[14px] font-semibold">{answer.q}</div>
+          <p className="mt-1.5 whitespace-pre-wrap text-[14px] leading-relaxed text-ink-2">{answer.a.text}</p>
+          {answer.a.references.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1">
+              {answer.a.references.map((r) =>
+                /^(E\d|M\d|0\d)/.test(r) ? (
+                  <DocChip key={r} id={r} onClick={() => openDoc({ doc: r, quotes: [], title: answer.q })} />
+                ) : (
+                  <Clause key={r} id={r} />
+                ),
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 export function ExplainTab({ claim, ready, openDoc }: { claim: Claim; ready: boolean; openDoc: (t: DrawerTarget) => void }) {
+  return (
+    <div className="space-y-5">
+      <AskBox claim={claim} openDoc={openDoc} />
+      <CannedWhy claim={claim} ready={ready} openDoc={openDoc} />
+    </div>
+  );
+}
+
+function CannedWhy({ claim, ready, openDoc }: { claim: Claim; ready: boolean; openDoc: (t: DrawerTarget) => void }) {
   const [i, setI] = useState(0);
   if (!ready) return <div className="rounded-lg border border-dashed border-line py-16 text-center text-[13px] text-faint">Available once the Evidence Pack is complete.</div>;
   const w = claim.why[i];
