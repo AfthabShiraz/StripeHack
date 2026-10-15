@@ -15,9 +15,11 @@ export interface DrawerTarget {
 
 export function DocDrawer({ claim, target, onClose }: { claim: Claim; target: DrawerTarget | null; onClose: () => void }) {
   const [docId, setDocId] = useState(target?.doc ?? "");
-  useEffect(() => {
+  const [prevTarget, setPrevTarget] = useState(target);
+  if (target !== prevTarget) {
+    setPrevTarget(target);
     if (target) setDocId(target.doc);
-  }, [target]);
+  }
   useEffect(() => {
     if (!target) return;
     const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();

@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle, CheckCircle2, FileText, XCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { COMPANY_DOCS } from "@/lib/data";
 import { money } from "@/lib/format";
 import type { Claim, ClaimStatus, Finding } from "@/lib/types";
@@ -103,43 +103,37 @@ function Column({ title, icon, items, empty, ...rest }: ColumnProps) {
 }
 
 export function ReviewTab({ claim, findings, status, done, focus }: { claim: Claim; findings: Finding[]; status: ClaimStatus; done: boolean; focus?: string | null }) {
-  const [sel, setSel] = useState<string | null>(null);
+  const [pick, setPick] = useState<string | null>(focus ?? null);
   const [cite, setCite] = useState(0);
-  const [docId, setDocId] = useState("CF");
+  const [docOverride, setDocOverride] = useState<string | null>(null);
+  const [prevFocus, setPrevFocus] = useState(focus);
+  if (focus !== prevFocus) {
+    setPrevFocus(focus);
+    if (focus) {
+      setPick(focus);
+      setCite(0);
+      setDocOverride(null);
+    }
+  }
 
   const forF = findings.filter((f) => f.side === "for");
   const against = findings.filter((f) => f.side === "against");
   const flags = findings.filter((f) => f.side === "flag");
 
-  // default selection: the first finding against, so the viewer opens on a highlight
-  useEffect(() => {
-    if (sel || !findings.length) return;
-    const first = findings.find((f) => f.side === "against") ?? findings[0];
-    setSel(first.id);
-    setCite(0);
-    setDocId(first.cites[0]?.doc ?? "CF");
-  }, [findings, sel]);
-
-  useEffect(() => {
-    if (!focus) return;
-    const f = claim.findings.find((x) => x.id === focus);
-    if (!f) return;
-    setSel(f.id);
-    setCite(0);
-    setDocId(f.cites[0]?.doc ?? "CF");
-  }, [focus, claim.findings]);
-
+  // with nothing picked, open the first finding against so the viewer starts on a highlight
+  const fallback = (against[0] ?? findings[0])?.id ?? null;
+  const sel = pick && findings.some((f) => f.id === pick) ? pick : fallback;
   const selected = findings.find((f) => f.id === sel);
+  const docId = docOverride ?? selected?.cites[cite]?.doc ?? "CF";
 
   function choose(id: string) {
-    const f = findings.find((x) => x.id === id);
-    setSel(id);
+    setPick(id);
     setCite(0);
-    if (f?.cites[0]) setDocId(f.cites[0].doc);
+    setDocOverride(null);
   }
   function chooseCite(i: number) {
     setCite(i);
-    if (selected?.cites[i]) setDocId(selected.cites[i].doc);
+    setDocOverride(null);
   }
 
   const highlights: HL[] = useMemo(() => {
@@ -213,7 +207,7 @@ export function ReviewTab({ claim, findings, status, done, focus }: { claim: Cla
 
       <div className="min-w-0">
         <div className="sticky top-4">
-          <DocumentViewer docs={docs} docId={docId} onDocChange={setDocId} highlights={highlights} claimId={claim.id} className="h-[calc(100vh-150px)]" />
+          <DocumentViewer docs={docs} docId={docId} onDocChange={setDocOverride} highlights={highlights} claimId={claim.id} className="h-[calc(100vh-150px)]" />
         </div>
       </div>
     </div>

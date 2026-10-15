@@ -241,7 +241,7 @@ export function SummaryStrip({ claim, status, done, decision, findings, citation
       v: done ? <span className="flex items-center gap-2">{claim.fraudScore}<Pill tone={claim.fraudBand === "Green" ? "ok" : claim.fraudBand === "Amber" ? "warn" : "bad"}>{claim.fraudBand}</Pill></span> : <span className="text-faint">—</span>,
       sub: "FRD-03",
     },
-    { k: "Evidence", v: `${findings} findings`, sub: `${citations} citations` },
+    { k: "Evidence", v: `${findings} ${findings === 1 ? "finding" : "findings"}`, sub: `${citations} ${citations === 1 ? "citation" : "citations"}` },
   ];
   return (
     <div className="grid grid-cols-6 divide-x divide-line rounded-lg border border-line">

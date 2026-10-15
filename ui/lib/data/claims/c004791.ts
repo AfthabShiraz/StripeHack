@@ -398,7 +398,7 @@ export const c004791: Claim = {
 
   logs: [
     { id: "evt_01", type: "claim.referred", detail: "T1 · full decline outside T0 authority", actor: "agent.decision", at: "Sep 30, 11:07" },
-    { id: "evt_02", type: "evidence_pack.created", detail: "2 lines · 8 findings · 17 citations", actor: "agent.orchestrator", at: "Sep 30, 11:06" },
+    { id: "evt_02", type: "evidence_pack.created", detail: "2 lines · 8 findings · 14 citations", actor: "agent.orchestrator", at: "Sep 30, 11:06" },
     { id: "evt_03", type: "triage.started", detail: "9 agents scheduled", actor: "agent.orchestrator", at: "Sep 30, 11:04" },
     { id: "evt_04", type: "document.received", detail: "E04 orthopaedic referral", actor: "claimant", at: "Sep 30, 10:58" },
     { id: "evt_05", type: "info.requested", detail: "Referral letter mentioned in GP letter", actor: "claims@larkspur", at: "Sep 28, 13:20" },
@@ -445,7 +445,7 @@ export const c004791: Claim = {
         { t: s(110.0), type: "spawn", label: "Spawned Decision & authority" },
         { t: s(141.6), type: "decision", label: "Referred to T1", detail: "Recommendation DECLINE · no payment", result: "warn" },
       ],
-      output: { evidence_pack: "ep_4791_v1", findings: 8, citations: 17, outcome: "REFER", recommendation: "DECLINE" },
+      output: { evidence_pack: "ep_4791_v1", findings: 8, citations: 14, outcome: "REFER", recommendation: "DECLINE" },
     },
     {
       id: "intake",

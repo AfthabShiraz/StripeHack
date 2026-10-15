@@ -17,7 +17,7 @@ import {
   ShieldCheck,
   Wrench,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { clock, duration, tokens } from "@/lib/format";
 import { agentEnd, agentState, childrenOf } from "@/lib/live";
 import { useStore } from "@/lib/store";
@@ -341,11 +341,8 @@ export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim
     return r.sort((a, b) => b.start - a.start)[0]?.id;
   }, [claim.agents, elapsed]);
 
-  useEffect(() => {
-    if (follow && running && latestRunning) setSelected(latestRunning);
-  }, [follow, running, latestRunning]);
-
-  const agent = claim.agents.find((a) => a.id === selected) ?? claim.agents[0];
+  const current = follow && running && latestRunning ? latestRunning : selected;
+  const agent = claim.agents.find((a) => a.id === current) ?? claim.agents[0];
   const doneCount = claim.agents.filter((a) => agentState(a, elapsed) === "done").length;
   const runCount = claim.agents.filter((a) => agentState(a, elapsed) === "running").length;
   const tok = claim.agents.filter((a) => agentState(a, elapsed) !== "queued").reduce((n, a) => n + a.tokensIn + a.tokensOut, 0);

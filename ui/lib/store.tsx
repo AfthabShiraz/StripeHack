@@ -66,7 +66,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [decisions, setDecisions] = useState<Record<string, Decision>>({});
 
   useEffect(() => {
+    // Restore the run clock and decisions after mount so the static HTML matches the first client render.
     const saved = readJSON<number>("session", LIVE_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setLiveStart(saved);
     else writeJSON("session", LIVE_KEY, liveStart);
     const d = readJSON<Record<string, Decision>>("local", DECISIONS_KEY);
@@ -172,7 +174,7 @@ export function claimLogs(claim: Claim, elapsed: number, status: ClaimStatus, de
       if (elapsed >= a.start + a.duration) extra.push({ id: `live_${a.id}`, type: "agent.completed", detail: a.name, actor: `agent.${a.id}`, at: "Oct 15, 08:53" });
     }
     if (elapsed >= claim.runLength) {
-      extra.push({ id: "live_pack", type: "evidence_pack.created", detail: "6 lines · 8 findings · 16 citations", actor: "agent.orchestrator", at: "Oct 15, 08:54" });
+      extra.push({ id: "live_pack", type: "evidence_pack.created", detail: "6 lines · 8 findings · 13 citations", actor: "agent.orchestrator", at: "Oct 15, 08:54" });
       extra.push({ id: "live_ref", type: "claim.referred", detail: "T1 · net £1,252.08 over T0 limit", actor: "agent.decision", at: "Oct 15, 08:54" });
     }
   }

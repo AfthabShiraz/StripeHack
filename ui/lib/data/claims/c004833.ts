@@ -377,8 +377,8 @@ export const c004833: Claim = {
     { id: "evt_01", type: "payout.paid", detail: "£98.76 to •••• 4508", actor: "stripe", at: "Oct 12, 07:14" },
     { id: "evt_02", type: "payout.created", detail: "po_1QBa9xLk4833hJkL5mNp · idem CLM-2026-004833-v1", actor: "agent.payment", at: "Oct 12, 07:14" },
     { id: "evt_03", type: "authority.passed", detail: "T0 · P1–P10 pass", actor: "agent.decision", at: "Oct 12, 07:13" },
-    { id: "evt_04", type: "evidence_pack.created", detail: "3 lines · 5 findings · 12 citations", actor: "agent.orchestrator", at: "Oct 12, 07:13" },
-    { id: "evt_05", type: "triage.started", detail: "8 agents scheduled", actor: "agent.orchestrator", at: "Oct 12, 07:12" },
+    { id: "evt_04", type: "evidence_pack.created", detail: "3 lines · 5 findings · 11 citations", actor: "agent.orchestrator", at: "Oct 12, 07:13" },
+    { id: "evt_05", type: "triage.started", detail: "9 agents scheduled", actor: "agent.orchestrator", at: "Oct 12, 07:12" },
     { id: "evt_06", type: "claim.created", detail: "App · 6 attachments", actor: "claimant", at: "Oct 11, 19:02" },
   ],
 
@@ -417,7 +417,7 @@ export const c004833: Claim = {
         { t: s(85.2), type: "spawn", label: "Spawned Payment" },
         { t: s(96.8), type: "decision", label: "Run complete", detail: "Paid £98.76", result: "pass" },
       ],
-      output: { evidence_pack: "ep_4833_v1", findings: 5, citations: 12, outcome: "SETTLE", net_gbp: 98.76 },
+      output: { evidence_pack: "ep_4833_v1", findings: 5, citations: 11, outcome: "SETTLE", net_gbp: 98.76 },
     },
     {
       id: "intake",

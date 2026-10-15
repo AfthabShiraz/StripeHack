@@ -449,7 +449,7 @@ export const c004861: Claim = {
         { t: s(66.5), type: "spawn", label: "Spawned Decision & authority" },
         { t: s(83.6), type: "decision", label: "Referred to T1", detail: "Recommend pay £1,252.08", result: "warn" },
       ],
-      output: { evidence_pack: "ep_4861_v1", findings: 8, citations: 16, outcome: "REFER", recommendation: "SETTLE_PARTIAL", net_gbp: 1252.08 },
+      output: { evidence_pack: "ep_4861_v1", findings: 8, citations: 13, outcome: "REFER", recommendation: "SETTLE_PARTIAL", net_gbp: 1252.08 },
     },
     {
       id: "intake",

@@ -3,7 +3,7 @@
 import { Bot, Search, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { clock, money } from "@/lib/format";
 import { agentState } from "@/lib/live";
 import { useAllClaimStates } from "@/lib/store";
@@ -27,7 +27,11 @@ export function ClaimsList() {
   const view = (params.get("view") as View) || "all";
   const [q, setQ] = useState(params.get("q") ?? "");
   const paramQ = params.get("q") ?? "";
-  useEffect(() => setQ(paramQ), [paramQ]);
+  const [prevQ, setPrevQ] = useState(paramQ);
+  if (paramQ !== prevQ) {
+    setPrevQ(paramQ);
+    setQ(paramQ);
+  }
   const [route, setRoute] = useState<"All" | "Agent" | "Human">("All");
   const states = useAllClaimStates();
 

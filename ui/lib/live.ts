@@ -30,7 +30,7 @@ export function readyAt(claim: Claim, kind: Agent["kind"]) {
 }
 
 export function citationCount(claim: Claim) {
-  return claim.findings.reduce((n, f) => n + f.cites.length, 0) + claim.agents.reduce((n, a) => n + a.steps.filter((s) => s.cite).length, 0);
+  return claim.findings.reduce((n, f) => n + f.cites.length, 0);
 }
 
 export function childrenOf(claim: Claim) {
