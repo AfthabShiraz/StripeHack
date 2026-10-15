@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --canvas: #f6f8fa;
+  --sidebar: #f6f8fa;
+  --ink: #0a2540;
+  --ink-2: #414552;
+  --muted: #687385;
+  --faint: #a3acba;
+  --line: #e3e8ee;
+  --line-2: #ebeef1;
+  --primary: #635bff;
+  --primary-hover: #5851ea;
+  --primary-soft: #f2f1ff;
+  --primary-ink: #4b45c6;
+  --agent: #635bff;
+  --human: #00a3c4;
+  --ok-bg: #d7f7c2;
+  --ok-ink: #006908;
+  --warn-bg: #fcedb9;
+  --warn-ink: #a82c00;
+  --bad-bg: #ffe7f2;
+  --bad-ink: #b3093c;
+  --info-bg: #cff5f6;
+  --info-ink: #0055bc;
+  --neutral-bg: #ebeef1;
+  --neutral-ink: #545969;
+  --hl-for: #c9f2b1;
+  --hl-for-line: #2e8a3a;
+  --hl-against: #ffd3de;
+  --hl-against-line: #df1b41;
+  --hl-flag: #fde7a2;
+  --hl-flag-line: #c26a00;
+  --hl-neutral: #e3e1ff;
+  --hl-neutral-line: #635bff;
+  --test: #ff8f0e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-canvas: var(--canvas);
+  --color-sidebar: var(--sidebar);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-ink: var(--primary-ink);
+  --color-agent: var(--agent);
+  --color-human: var(--human);
+  --color-ok-bg: var(--ok-bg);
+  --color-ok-ink: var(--ok-ink);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-ink: var(--warn-ink);
+  --color-bad-bg: var(--bad-bg);
+  --color-bad-ink: var(--bad-ink);
+  --color-info-bg: var(--info-bg);
+  --color-info-ink: var(--info-ink);
+  --color-neutral-bg: var(--neutral-bg);
+  --color-neutral-ink: var(--neutral-ink);
+  --color-test: var(--test);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
 }
+
+::selection {
+  background: #d9d6ff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d5dbe3 transparent;
+}
+
+mark.hl {
+  border-radius: 2px;
+  padding: 0 1px;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+mark.hl-for { background: var(--hl-for); box-shadow: inset 0 -2px 0 var(--hl-for-line); }
+mark.hl-against { background: var(--hl-against); box-shadow: inset 0 -2px 0 var(--hl-against-line); }
+mark.hl-flag { background: var(--hl-flag); box-shadow: inset 0 -2px 0 var(--hl-flag-line); }
+mark.hl-neutral { background: var(--hl-neutral); box-shadow: inset 0 -2px 0 var(--hl-neutral-line); }
+mark.hl-active { outline: 2px solid var(--ink); outline-offset: 1px; animation: hl-pulse 1.2s ease-out 1; }
+
+@keyframes hl-pulse {
+  0% { outline-color: var(--primary); outline-offset: 6px; }
+  100% { outline-color: var(--ink); outline-offset: 1px; }
+}
+
+/* the running-bar stripes */
+.stripes-run {
+  background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.28) 0 6px, transparent 6px 12px);
+  background-size: 17px 17px;
+  animation: stripes 0.8s linear infinite;
+}
+@keyframes stripes {
+  from { background-position: 0 0; }
+  to { background-position: 17px 0; }
+}
+
+.brand-gradient {
+  background: linear-gradient(115deg, #635bff 0%, #a960ee 38%, #ff7a59 72%, #ffcb57 100%);
+}
+
+.paper {
+  box-shadow: 0 1px 2px rgba(10, 37, 64, 0.08), 0 4px 16px rgba(10, 37, 64, 0.06);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-in { animation: fade-in 0.35s ease-out both; }
+
+@keyframes slide-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.slide-in { animation: slide-in 0.22s ease-out both; }
