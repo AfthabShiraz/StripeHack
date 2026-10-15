@@ -1,11 +1,11 @@
 "use client";
 
-import { BookOpen, FileStack, Home, Inbox, Landmark, Search, Sparkles } from "lucide-react";
+import { BookOpen, Clock, FileStack, Home, Inbox, Landmark, Search, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { REVIEWER, useAllClaimStates } from "@/lib/store";
-import { Logo, cx } from "../ui";
+import { Logo, StreakMark, cx } from "../ui";
 
 function NavItem({ href, icon, label, active, badge, live }: { href: string; icon: React.ReactNode; label: string; active: boolean; badge?: number; live?: boolean }) {
   return (
@@ -44,6 +44,7 @@ function Nav() {
   const states = useAllClaimStates();
   const review = states.filter((s) => s.status === "needs_review").length;
   const triaging = states.filter((s) => s.status === "triaging").length;
+  const waiting = states.filter((s) => s.status === "awaiting_evidence").length;
 
   return (
     <>
@@ -53,6 +54,7 @@ function Nav() {
       <Section title="Claims">
         <NavItem href="/claims" icon={<FileStack className="size-4" />} label="All claims" active={path.startsWith("/claims") && !view} />
         <NavItem href="/claims?view=review" icon={<Inbox className="size-4" />} label="Review queue" active={path === "/claims" && view === "review"} badge={review} />
+        <NavItem href="/claims?view=waiting" icon={<Clock className="size-4" />} label="Awaiting evidence" active={path === "/claims" && view === "waiting"} badge={waiting} />
         <NavItem href="/claims?view=triaging" icon={<Sparkles className="size-4" />} label="Live triage" active={path === "/claims" && view === "triaging"} badge={triaging} live />
       </Section>
       <Section title="Money">
@@ -108,8 +110,8 @@ export function Sidebar() {
       <div className="flex items-center gap-2.5 px-4 pb-3 pt-4">
         <Logo className="size-7" />
         <div className="leading-tight">
-          <div className="text-[15px] font-bold tracking-tight text-ink">stripe insurance</div>
-          <div className="text-[12px] text-muted">Strype Assurance</div>
+          <div className="text-[15px] font-bold tracking-tight text-ink">Strype Assurance</div>
+          <div className="text-[12px] text-muted">Claims</div>
         </div>
       </div>
       <div className="px-3">
@@ -120,6 +122,13 @@ export function Sidebar() {
           <Nav />
         </Suspense>
       </nav>
+      <div className="flex items-center gap-1.5 px-5 pb-2 text-[11px] text-faint">
+        Powered by
+        <span className="flex items-center gap-1 font-semibold text-ink-2">
+          <StreakMark className="size-3.5 text-primary" />
+          Streak
+        </span>
+      </div>
       <div className="border-t border-line p-3">
         <div className="flex items-center gap-2.5 rounded-md px-1 py-1">
           <div className="flex size-8 items-center justify-center rounded-full bg-[#e3e1ff] text-[12px] font-semibold text-primary-ink">{REVIEWER.initials}</div>

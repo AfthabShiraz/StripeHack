@@ -29,6 +29,7 @@ export function Pill({ tone = "neutral", children, dot, className }: { tone?: To
 }
 
 export const STATUS_LABEL: Record<ClaimStatus, string> = {
+  awaiting_evidence: "Awaiting evidence",
   triaging: "Triaging",
   needs_review: "Needs review",
   auto_settled: "Auto-settled",
@@ -38,7 +39,7 @@ export const STATUS_LABEL: Record<ClaimStatus, string> = {
 };
 
 export function StatusPill({ status }: { status: ClaimStatus }) {
-  const tone: Record<ClaimStatus, Tone> = { triaging: "primary", needs_review: "warn", auto_settled: "ok", approved: "info", declined: "bad", paid: "ok" };
+  const tone: Record<ClaimStatus, Tone> = { awaiting_evidence: "info", triaging: "primary", needs_review: "warn", auto_settled: "ok", approved: "info", declined: "bad", paid: "ok" };
   return (
     <Pill tone={tone[status]} dot={status === "triaging" || status === "approved"}>
       {STATUS_LABEL[status]}
@@ -195,6 +196,7 @@ export function Clause({ id }: { id: string }) {
   return <span className="inline-flex h-5 items-center rounded-[4px] border border-line bg-white px-1.5 font-mono text-[11px] text-ink-2">{id}</span>;
 }
 
+/** Parody insurer mark: a striped shield. */
 export function Logo({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 28 28" className={className} aria-hidden>
@@ -205,15 +207,24 @@ export function Logo({ className }: { className?: string }) {
           <stop offset="1" stopColor="#ff7a59" />
         </linearGradient>
         <clipPath id="si-c">
-          <rect width="28" height="28" rx="7" />
+          <path d="M14 1.5 L25 5.5 V13.5 C25 20 20.4 24.6 14 26.5 C7.6 24.6 3 20 3 13.5 V5.5 Z" />
         </clipPath>
       </defs>
-      <rect width="28" height="28" rx="7" fill="url(#si-g)" />
-      <g clipPath="url(#si-c)" stroke="#fff" strokeWidth="3.2" strokeLinecap="round" opacity="0.95">
-        <path d="M5 18 L13 10" />
-        <path d="M10 22 L22 10" />
-        <path d="M17 23 L23 17" />
+      <path d="M14 1.5 L25 5.5 V13.5 C25 20 20.4 24.6 14 26.5 C7.6 24.6 3 20 3 13.5 V5.5 Z" fill="url(#si-g)" />
+      <g clipPath="url(#si-c)" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" opacity="0.95">
+        <path d="M4 16 L14 6" />
+        <path d="M8 21 L20 9" />
+        <path d="M14 24 L24 14" />
       </g>
+    </svg>
+  );
+}
+
+/** Streak mark for the "Powered by" line. */
+export function StreakMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} aria-hidden>
+      <path d="M2 12.5 L9.5 3.5 L8.6 8 L14 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

@@ -21,7 +21,13 @@ export function findingTime(claim: Claim, f: Finding) {
 }
 
 export function visibleFindings(claim: Claim, elapsed: number) {
-  return claim.findings.filter((f) => findingTime(claim, f) <= elapsed);
+  const live = claim.episodes ? claim.episodes.length - 1 : -1;
+  return claim.findings.filter((f) => (claim.episodes && (f.episode ?? 0) < live) || findingTime(claim, f) <= elapsed);
+}
+
+/** Findings written in a given episode. */
+export function episodeFindings(claim: Claim, episode: number) {
+  return claim.findings.filter((f) => (f.episode ?? 0) === episode);
 }
 
 export function readyAt(claim: Claim, kind: Agent["kind"]) {

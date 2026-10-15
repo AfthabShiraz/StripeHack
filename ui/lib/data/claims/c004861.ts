@@ -248,7 +248,7 @@ export const c004861: Claim = {
   tripDates: "10–14 Oct 2026",
   lossDate: "Oct 11, 2026",
   reported: "Oct 15, 2026",
-  status: "triaging",
+  status: "needs_review",
   claimed: 1343.12,
   net: 1252.08,
   route: "human",
@@ -404,6 +404,8 @@ export const c004861: Claim = {
   },
 
   logs: [
+    { id: "evt_05", type: "claim.referred", detail: "T1 · net £1,252.08 over T0 limit", actor: "agent.decision", at: "Oct 15, 08:54" },
+    { id: "evt_04", type: "evidence_pack.created", detail: "6 lines · 8 findings · 13 citations", actor: "agent.orchestrator", at: "Oct 15, 08:54" },
     { id: "evt_03", type: "triage.started", detail: "9 agents scheduled", actor: "agent.orchestrator", at: "Oct 15, 08:52" },
     { id: "evt_02", type: "document.received", detail: "6 attachments", actor: "claimant", at: "Oct 15, 08:51" },
     { id: "evt_01", type: "claim.created", detail: "App", actor: "claimant", at: "Oct 15, 08:51" },

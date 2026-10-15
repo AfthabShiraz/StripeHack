@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ShieldAlert, Sparkles } from "lucide-react";
+import { Check, Clock, ShieldAlert, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { clock, money } from "@/lib/format";
 import { agentState } from "@/lib/live";
@@ -9,6 +9,45 @@ import type { Claim, ClaimStatus } from "@/lib/types";
 import { Button, CopyId, Modal, Pill, StatusPill, cx } from "../ui";
 
 export function Banner({ claim, status, elapsed, onWatch }: { claim: Claim; status: ClaimStatus; elapsed: number; onWatch: () => void }) {
+  const { spawn } = useStore();
+  if (status === "awaiting_evidence") {
+    const live = (claim.episodes?.length ?? 1) - 1;
+    const open = claim.requests?.filter((r) => r.received === undefined || r.received >= live) ?? [];
+    const first = open[0];
+    return (
+      <div className="flex h-10 items-center gap-2 border-b border-[#b6e3f4] bg-[#eef9fd] px-6 text-[13px] text-info-ink">
+        <Clock className="size-3.5" />
+        <span className="font-semibold">Waiting on the customer:</span>
+        <span className="truncate">
+          {open.map((r) => r.item).join(", ")}
+          {first && ` · asked ${first.chased.length + 1} times, last ${claim.emails?.filter((m) => m.requests?.includes(first.id)).slice(-1)[0]?.at ?? ""}`}
+        </span>
+        <button
+          type="button"
+          onClick={spawn}
+          className="ml-auto flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[#ffc58a] bg-white px-2.5 text-[12.5px] font-medium text-[#b54708] shadow-[0_1px_1px_rgba(10,37,64,0.06)] hover:bg-[#fff6ec]"
+        >
+          <span className="rounded-[3px] bg-[#fff1e0] px-1 text-[10px] font-semibold uppercase tracking-wide">Test</span>
+          Simulate customer reply
+        </button>
+      </div>
+    );
+  }
+  if (status === "triaging" && claim.episodes) {
+    const done = claim.agents.filter((a) => agentState(a, elapsed) === "done").length;
+    return (
+      <div className="flex h-10 items-center gap-2 border-b border-[#d9d6ff] bg-primary-soft px-6 text-[13px] text-primary-ink">
+        <Sparkles className="size-3.5" />
+        <span className="font-semibold">New evidence from the customer. Agents woke up and are reading it.</span>
+        <span>
+          {done} of {claim.agents.length} agents done · {clock(elapsed)}
+        </span>
+        <button type="button" onClick={onWatch} className="ml-auto font-semibold underline-offset-2 hover:underline">
+          Watch agents
+        </button>
+      </div>
+    );
+  }
   if (status === "triaging") {
     const done = claim.agents.filter((a) => agentState(a, elapsed) === "done").length;
     return (
@@ -43,6 +82,17 @@ interface Step {
 }
 
 function steps(claim: Claim, status: ClaimStatus, elapsed: number, decision?: Decision): Step[] {
+  if (claim.episodes) {
+    const live = claim.episodes.length - 1;
+    const received = claim.episodes.slice(0, elapsed < 0 ? live : live + 1).reduce((n, e) => n + e.docs.length, 0);
+    const done = elapsed >= claim.runLength;
+    return [
+      { label: "Reported", sub: claim.reported, state: "done" },
+      { label: "Gathering evidence", sub: `${received} documents · ${claim.episodes.length - (elapsed < 0 ? 1 : 0)} agent runs`, state: elapsed < 0 ? "current" : "done" },
+      { label: "Decision", sub: done ? "Agent · T0" : elapsed < 0 ? "Held for evidence" : "Agents working", state: done ? "done" : elapsed < 0 ? "todo" : "current" },
+      { label: "Paid", sub: done ? (claim.payment.created ?? "") : "", state: done ? "done" : "todo" },
+    ];
+  }
   const triaged = status !== "triaging";
   const humanDecided = !!decision;
   const agentPaid = claim.route === "agent";
@@ -222,6 +272,29 @@ export function ClaimHeader({ claim, status, onShowPayment }: { claim: Claim; st
 
 export function SummaryStrip({ claim, status, done, decision, findings, citations }: { claim: Claim; status: ClaimStatus; done: boolean; decision?: Decision; findings: number; citations: number }) {
   const paid = status === "paid" ? (decision?.amount ?? claim.payment.amount) : 0;
+  const held = !!claim.episodes && !done;
+  if (held) {
+    const partial = claim.fraud.filter((f) => f.triggered && !f.pending).reduce((n, f) => n + f.weight, 0);
+    const cellsHeld: { k: string; v: React.ReactNode; sub?: React.ReactNode }[] = [
+      { k: "Claimed", v: money(claim.claimed), sub: `${claim.lines.length} lines` },
+      { k: "Provisional", v: money(claim.net), sub: "All lines decided" },
+      { k: "Paid", v: money(0), sub: status === "triaging" ? "Agents working" : "On hold" },
+      { k: "Route", v: "Agent", sub: "Within T0 if screen passes" },
+      { k: "Fraud screen", v: <span className="flex items-center gap-2">{partial}<Pill tone="neutral">Incomplete</Pill></span>, sub: "F2, F3 need police report" },
+      { k: "Evidence", v: `${findings} findings`, sub: `${citations} citations` },
+    ];
+    return (
+      <div className="grid grid-cols-6 divide-x divide-line rounded-lg border border-line">
+        {cellsHeld.map((c) => (
+          <div key={c.k} className="min-w-0 px-4 py-3">
+            <div className="text-[12px] text-muted">{c.k}</div>
+            <div className="mt-0.5 truncate text-[17px] font-semibold tabular-nums text-ink">{c.v}</div>
+            <div className="truncate text-[12px] text-muted">{c.sub}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
   const rec = claim.recommendation === "DECLINE" ? "Decline" : claim.recommendation === "SETTLE" ? "Pay in full" : "Pay in part";
   const cells: { k: string; v: React.ReactNode; sub?: React.ReactNode }[] = [
     { k: "Claimed", v: money(claim.claimed), sub: `${claim.lines.length} lines` },

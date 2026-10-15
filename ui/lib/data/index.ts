@@ -5,9 +5,9 @@ import { c004833 } from "./claims/c004833";
 import { c004861 } from "./claims/c004861";
 import { COMPANY_DOCS } from "./generated-docs";
 
-export const CLAIMS: Claim[] = [c004861, c004791, c004833, c004817];
+export const CLAIMS: Claim[] = [c004817, c004861, c004791, c004833];
 
-export const LIVE_CLAIM_ID = c004861.id;
+export const LIVE_CLAIM_ID = c004817.id;
 
 export function getClaim(id: string) {
   return CLAIMS.find((c) => c.id === id);

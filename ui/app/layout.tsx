@@ -8,8 +8,8 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Stripe Insurance · Claims",
-  description: "Claims console for Strype Assurance travel claims.",
+  title: "Strype Assurance · Claims",
+  description: "Claims console powered by Streak.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
