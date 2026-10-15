@@ -25,7 +25,7 @@ interface Store {
 
 const StoreContext = createContext<Store | null>(null);
 
-export const REVIEWER = { name: "Alex Morgan", initials: "AM", level: "T2 · Senior claims handler", email: "alex.morgan@larkspur.example" };
+export const REVIEWER = { name: "Alex Morgan", initials: "AM", level: "T2 · Senior claims handler", email: "alex.morgan@strype.example" };
 
 const LIVE_KEY = "si.liveStart";
 const DECISIONS_KEY = "si.decisions";

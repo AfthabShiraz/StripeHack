@@ -9,7 +9,7 @@ const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["lati
 
 export const metadata: Metadata = {
   title: "Stripe Insurance · Claims",
-  description: "Claims console for Larkspur Assurance travel claims.",
+  description: "Claims console for Strype Assurance travel claims.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

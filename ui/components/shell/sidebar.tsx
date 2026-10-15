@@ -109,7 +109,7 @@ export function Sidebar() {
         <Logo className="size-7" />
         <div className="leading-tight">
           <div className="text-[15px] font-bold tracking-tight text-ink">stripe insurance</div>
-          <div className="text-[12px] text-muted">Larkspur Assurance</div>
+          <div className="text-[12px] text-muted">Strype Assurance</div>
         </div>
       </div>
       <div className="px-3">

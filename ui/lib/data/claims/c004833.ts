@@ -8,11 +8,11 @@ const docs: RawDoc[] = [
     name: "00_claim_form.pdf",
     title: "Claim form",
     kind: "form",
-    text: `# LARKSPUR ASSURANCE — ONLINE CLAIM FORM
+    text: `# STRYPE ASSURANCE — ONLINE CLAIM FORM
 
 **Claim reference:** CLM-2026-004833
 **Submitted:** 2026-10-11 19:02:41 UTC · Channel: app
-**Policy number:** LRK-TRV-26-0074410
+**Policy number:** STR-TRV-26-0074410
 
 ## 1. Claimant
 
@@ -65,16 +65,16 @@ Signed: Priya Raman · 2026-10-11 19:02:30 UTC`,
   },
   {
     id: "CERT",
-    name: "LRK-TRV-26-0074410_certificate.pdf",
+    name: "STR-TRV-26-0074410_certificate.pdf",
     title: "Certificate of insurance",
     kind: "policy",
-    text: `# LARKSPUR ASSURANCE LTD — CERTIFICATE OF INSURANCE
+    text: `# STRYPE ASSURANCE LTD — CERTIFICATE OF INSURANCE
 
 **Travel Insurance — Single Trip**
 
 | Field | Value |
 |---|---|
-| Policy number | LRK-TRV-26-0074410 |
+| Policy number | STR-TRV-26-0074410 |
 | Policyholder | Ms Priya Raman |
 | Date of issue | 11 September 2026 |
 | Cover level | **Silver** |
@@ -95,7 +95,7 @@ Signed: Priya Raman · 2026-10-11 19:02:30 UTC`,
 
 Emergency medical £100 · Personal belongings £75 · Delayed baggage nil
 
-*Larkspur Assurance Ltd is a fictional company. All persons and details in this document are fictitious.*`,
+*Strype Assurance Ltd is a fictional company. All persons and details in this document are fictitious.*`,
   },
   {
     id: "E01",
@@ -245,7 +245,7 @@ export const c004833: Claim = {
   apiId: "clm_1QBa7mLk4833PrRmn",
   claimant: "Priya Raman",
   email: "priya.raman@example.com",
-  policy: "LRK-TRV-26-0074410",
+  policy: "STR-TRV-26-0074410",
   product: "Travel · Single trip",
   cover: "Silver",
   wording: "TRV-2026 v1",
@@ -367,7 +367,7 @@ export const c004833: Claim = {
     payee: "Ms P Raman",
     payeeToken: "payee_tok_2b71d05c88",
     account: "•••• 4508",
-    reference: "LARKSPUR CLM-2026-004833",
+    reference: "STRYPE CLM-2026-004833",
     idempotencyKey: "CLM-2026-004833-v1",
     created: "Oct 12, 2026, 07:14",
     approvedBy: "Agent (T0)",
@@ -432,7 +432,7 @@ export const c004833: Claim = {
       docs: ["CF", "CERT"],
       clauses: ["§1", "GC.1"],
       steps: [
-        { t: s(1.5), type: "read", label: "Read claim form", cite: { doc: "CF", quote: "LRK-TRV-26-0074410" } },
+        { t: s(1.5), type: "read", label: "Read claim form", cite: { doc: "CF", quote: "STR-TRV-26-0074410" } },
         { t: s(4.0), type: "read", label: "Read certificate", cite: { doc: "CERT", quote: "TRV-2026 v1" } },
         { t: s(8.2), type: "check", label: "Incident date inside period", clause: "SAP P2", result: "pass", cite: { doc: "CERT", quote: "2 October 2026 00:01 to 9 October 2026 23:59 (UK time)" } },
         { t: s(11.0), type: "check", label: "Notified 2 days after return", clause: "GC.1", result: "pass", cite: { doc: "CF", quote: "2026-10-11 19:02:41 UTC" } },

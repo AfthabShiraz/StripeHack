@@ -1,6 +1,6 @@
 # Claims console UI
 
-Frontend only. All data is mock, built from the synthetic Larkspur case in `/data`.
+Frontend only. All data is mock, built from the synthetic Strype case in `/data`.
 
 ```bash
 cd ui

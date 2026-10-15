@@ -8,11 +8,11 @@ const docs: RawDoc[] = [
     name: "00_claim_form.pdf",
     title: "Claim form",
     kind: "form",
-    text: `# LARKSPUR ASSURANCE — ONLINE CLAIM FORM
+    text: `# STRYPE ASSURANCE — ONLINE CLAIM FORM
 
 **Claim reference:** CLM-2026-004791
 **Submitted:** 2026-09-28 10:14:06 UTC · Channel: web
-**Policy number:** LRK-TRV-26-0072288
+**Policy number:** STR-TRV-26-0072288
 
 ## 1. Claimant
 
@@ -68,16 +68,16 @@ Signed: Daniel Okafor · 2026-09-28 10:13:51 UTC`,
   },
   {
     id: "CERT",
-    name: "LRK-TRV-26-0072288_certificate.pdf",
+    name: "STR-TRV-26-0072288_certificate.pdf",
     title: "Certificate of insurance",
     kind: "policy",
-    text: `# LARKSPUR ASSURANCE LTD — CERTIFICATE OF INSURANCE
+    text: `# STRYPE ASSURANCE LTD — CERTIFICATE OF INSURANCE
 
 **Travel Insurance — Single Trip**
 
 | Field | Value |
 |---|---|
-| Policy number | LRK-TRV-26-0072288 |
+| Policy number | STR-TRV-26-0072288 |
 | Policyholder | Mr Daniel Okafor |
 | Date of issue | 14 August 2026 |
 | Cover level | **Gold** |
@@ -102,7 +102,7 @@ The policyholder confirmed on 14/08/2026 that no insured person has a pre-existi
 
 Cancellation/Curtailment £50 · Emergency medical £50 · Personal belongings £50
 
-*Larkspur Assurance Ltd is a fictional company. All persons and details in this document are fictitious.*`,
+*Strype Assurance Ltd is a fictional company. All persons and details in this document are fictitious.*`,
   },
   {
     id: "E01",
@@ -240,7 +240,7 @@ export const c004791: Claim = {
   apiId: "clm_1Q7tKpLk4791DnOkf",
   claimant: "Daniel Okafor",
   email: "daniel.okafor@example.com",
-  policy: "LRK-TRV-26-0072288",
+  policy: "STR-TRV-26-0072288",
   product: "Travel · Single trip",
   cover: "Gold",
   wording: "TRV-2026 v1",
@@ -391,7 +391,7 @@ export const c004791: Claim = {
     payee: "Mr D Okafor",
     payeeToken: "payee_tok_51c0e9a7d2",
     account: "•••• 9264",
-    reference: "LARKSPUR CLM-2026-004791",
+    reference: "STRYPE CLM-2026-004791",
     idempotencyKey: "CLM-2026-004791-v1",
     approvedBy: "",
   },
@@ -401,7 +401,7 @@ export const c004791: Claim = {
     { id: "evt_02", type: "evidence_pack.created", detail: "2 lines · 8 findings · 14 citations", actor: "agent.orchestrator", at: "Sep 30, 11:06" },
     { id: "evt_03", type: "triage.started", detail: "9 agents scheduled", actor: "agent.orchestrator", at: "Sep 30, 11:04" },
     { id: "evt_04", type: "document.received", detail: "E04 orthopaedic referral", actor: "claimant", at: "Sep 30, 10:58" },
-    { id: "evt_05", type: "info.requested", detail: "Referral letter mentioned in GP letter", actor: "claims@larkspur", at: "Sep 28, 13:20" },
+    { id: "evt_05", type: "info.requested", detail: "Referral letter mentioned in GP letter", actor: "claims@strype", at: "Sep 28, 13:20" },
     { id: "evt_06", type: "claim.created", detail: "Web form · 5 attachments", actor: "claimant", at: "Sep 28, 10:14" },
   ],
 
@@ -460,7 +460,7 @@ export const c004791: Claim = {
       docs: ["CF", "CERT"],
       clauses: ["§1", "GC.1"],
       steps: [
-        { t: s(1.6), type: "read", label: "Read claim form", cite: { doc: "CF", quote: "LRK-TRV-26-0072288" } },
+        { t: s(1.6), type: "read", label: "Read claim form", cite: { doc: "CF", quote: "STR-TRV-26-0072288" } },
         { t: s(4.4), type: "read", label: "Read certificate", cite: { doc: "CERT", quote: "TRV-2026 v1" } },
         { t: s(8.9), type: "check", label: "Section A in force from purchase", clause: "SAP P2", result: "pass", cite: { doc: "CERT", quote: "From 14 August 2026 until start of trip" } },
         { t: s(12.1), type: "extract", label: "Medical declaration: none", result: "info", cite: { doc: "CERT", quote: "No conditions declared." } },

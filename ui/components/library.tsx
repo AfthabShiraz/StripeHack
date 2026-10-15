@@ -23,7 +23,7 @@ export function Library() {
     <div className="mx-auto grid max-w-[1440px] grid-cols-[400px_minmax(0,1fr)] gap-5 px-6 pb-8 pt-6">
       <div>
         <h1 className="text-[24px] font-semibold tracking-tight">Policy library</h1>
-        <div className="mt-1 text-[13px] text-muted">Larkspur Assurance · Travel · {COMPANY_DOCS.length} documents</div>
+        <div className="mt-1 text-[13px] text-muted">Strype Assurance · Travel · {COMPANY_DOCS.length} documents</div>
         <div className="mt-5 overflow-hidden rounded-lg border border-line">
           {COMPANY_DOCS.map((d) => {
             const m = META[d.id];
