@@ -63,6 +63,7 @@ export function Home() {
 
   const review = states.filter((s) => s.status === "needs_review");
   const live = states.filter((s) => s.status === "triaging");
+  const waiting = states.filter((s) => s.status === "awaiting_evidence");
   const decided = states.filter((s) => s.decision?.action === "approved");
   const total = t.agentPaid + t.humanPaid;
 
@@ -144,6 +145,28 @@ export function Home() {
             </div>
           </Card>
 
+          {waiting.length > 0 && (
+            <Card>
+              <CardHeader title="Waiting on customers" right={<span className="tabular-nums">{waiting.length}</span>} />
+              <div className="divide-y divide-line-2">
+                {waiting.map(({ claim }) => {
+                  const open = (claim.requests ?? []).filter((r) => r.received === undefined || r.received === (claim.episodes?.length ?? 0) - 1);
+                  return (
+                    <Link key={claim.id} href={`/claims/${claim.id}`} className="block px-4 py-3 hover:bg-canvas">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate text-[13.5px] font-semibold text-ink">{claim.claimant}</span>
+                        <span className="text-[13px] font-semibold tabular-nums">{money(claim.net)}</span>
+                      </div>
+                      <div className="mt-0.5 truncate text-[12px] text-muted">
+                        {open.map((r) => r.item).join(", ")} · asked {open[0] ? open[0].chased.length + 1 : 0} times
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </Card>
+          )}
+
           {live.map(({ claim, elapsed }) => {
             const running = claim.agents.filter((a) => a.kind !== "orchestrator" && agentState(a, elapsed) === "running");
             const done = claim.agents.filter((a) => agentState(a, elapsed) === "done").length;
@@ -188,6 +211,8 @@ export function Home() {
               <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Paid by agents, no person</span><span className="tabular-nums">{t.agentN.toLocaleString()}</span></div>
               <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Referred to a person</span><span className="tabular-nums">{t.referred.toLocaleString()}</span></div>
               <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Declined</span><span className="tabular-nums">{t.declined.toLocaleString()}</span></div>
+              <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Rejection rate</span><span className="tabular-nums">{pct(t.declined / (t.agentN + t.humanN + t.declined), 1)}</span></div>
+              <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Cost to review a claim</span><span className="tabular-nums">£14 agent · £126 person</span></div>
               <div className="flex justify-between py-1.5 text-[13px]"><span className="text-muted">Agent limit</span><span className="tabular-nums">£1,000 net</span></div>
             </div>
           </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, MessageSquareText, XCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, MessageSquareText, XCircle } from "lucide-react";
 import { useState } from "react";
 import { money } from "@/lib/format";
 import type { Decision } from "@/lib/store";
@@ -106,22 +106,29 @@ export function LinesTab({ claim, ready, openDoc }: { claim: Claim; ready: boole
   );
 }
 
-export function AuthorityTab({ claim, ready }: { claim: Claim; ready: boolean }) {
-  const score = claim.fraud.filter((f) => f.triggered).reduce((n, f) => n + f.weight, 0);
+export function AuthorityTab({ claim, ready, held }: { claim: Claim; ready: boolean; held?: boolean }) {
+  const score = claim.fraud.filter((f) => f.triggered && !(held && f.pending)).reduce((n, f) => n + f.weight, 0);
   if (!ready) return <div className="rounded-lg border border-dashed border-line py-16 text-center text-[13px] text-faint">Authority is checked by the Decision agent after the Evidence Pack is complete.</div>;
+  const blocked = claim.authority.some((a) => !a.pass || (held && a.pending));
   return (
     <div className="grid grid-cols-2 gap-5">
       <Card>
-        <CardHeader title="Authority · SAP-01 §3" right={claim.authority.every((a) => a.pass) ? <Pill tone="ok">T0 may pay</Pill> : <Pill tone="warn">Refer to {claim.tier}</Pill>} />
+        <CardHeader
+          title="Authority · SAP-01 §3"
+          right={held ? <Pill tone="warn">Payment held</Pill> : !blocked ? <Pill tone="ok">T0 may pay</Pill> : <Pill tone="warn">Refer to {claim.tier}</Pill>}
+        />
         <div className="divide-y divide-line-2">
-          {claim.authority.map((a) => (
-            <div key={a.id} className="flex items-center gap-3 px-4 py-2.5 text-[13px]">
-              {a.pass ? <CheckCircle2 className="size-4 shrink-0 text-[#1ea672]" /> : <XCircle className="size-4 shrink-0 text-bad-ink" />}
-              <span className="w-8 shrink-0 font-mono text-[12px] text-muted">{a.id}</span>
-              <span className="flex-1 text-ink">{a.rule}</span>
-              <span className={cx("text-right text-[12px]", a.pass ? "text-muted" : "font-medium text-bad-ink")}>{a.note}</span>
-            </div>
-          ))}
+          {claim.authority.map((a) => {
+            const pending = held && a.pending;
+            return (
+              <div key={a.id} className={cx("flex items-center gap-3 px-4 py-2.5 text-[13px]", pending && "bg-[#eef9fd]")}>
+                {pending ? <Clock className="size-4 shrink-0 text-info-ink" /> : a.pass ? <CheckCircle2 className="size-4 shrink-0 text-[#1ea672]" /> : <XCircle className="size-4 shrink-0 text-bad-ink" />}
+                <span className="w-8 shrink-0 font-mono text-[12px] text-muted">{a.id}</span>
+                <span className="flex-1 text-ink">{a.rule}</span>
+                <span className={cx("text-right text-[12px]", pending ? "font-medium text-info-ink" : a.pass ? "text-muted" : "font-medium text-bad-ink")}>{pending ? a.pending : a.note}</span>
+              </div>
+            );
+          })}
         </div>
       </Card>
       <Card>
@@ -130,7 +137,7 @@ export function AuthorityTab({ claim, ready }: { claim: Claim; ready: boolean })
           right={
             <span className="flex items-center gap-2">
               <b className="tabular-nums text-ink">{score}</b>
-              <Pill tone={claim.fraudBand === "Green" ? "ok" : claim.fraudBand === "Amber" ? "warn" : "bad"}>{claim.fraudBand}</Pill>
+              {held ? <Pill>Incomplete</Pill> : <Pill tone={claim.fraudBand === "Green" ? "ok" : claim.fraudBand === "Amber" ? "warn" : "bad"}>{claim.fraudBand}</Pill>}
             </span>
           }
         />
@@ -139,7 +146,7 @@ export function AuthorityTab({ claim, ready }: { claim: Claim; ready: boolean })
             <span className="absolute inset-y-0 left-0 w-[50%] bg-[#d7f7c2]" />
             <span className="absolute inset-y-0 left-[50%] w-[30%] bg-[#fcedb9]" />
             <span className="absolute inset-y-0 left-[80%] right-0 bg-[#ffe7f2]" />
-            <span className="absolute inset-y-0 w-1 -translate-x-1/2 rounded-full bg-ink" style={{ left: `${Math.min(100, (score / 50) * 100)}%` }} />
+            <span className="absolute inset-y-0 w-1 -translate-x-1/2 rounded-full bg-ink transition-all duration-700" style={{ left: `${Math.min(100, (score / 50) * 100)}%` }} />
           </div>
           <div className="mt-1 flex justify-between text-[11px] text-muted">
             <span>0</span>
@@ -148,67 +155,135 @@ export function AuthorityTab({ claim, ready }: { claim: Claim; ready: boolean })
           </div>
         </div>
         <div className="mt-2 divide-y divide-line-2">
-          {claim.fraud.map((f) => (
-            <div key={f.id} className={cx("flex items-center gap-3 px-4 py-2 text-[13px]", f.triggered && "bg-warn-bg/40")}>
-              <span className="w-7 shrink-0 font-mono text-[12px] text-muted">{f.id}</span>
-              <span className={cx("flex-1", f.triggered ? "font-medium text-ink" : "text-ink-2")}>{f.label}</span>
-              <span className="w-44 truncate text-right text-[12px] text-muted">{f.note}</span>
-              <span className={cx("w-8 text-right tabular-nums", f.triggered ? "font-semibold text-warn-ink" : "text-faint")}>{f.triggered ? `+${f.weight}` : "0"}</span>
-            </div>
-          ))}
+          {claim.fraud.map((f) => {
+            const pending = held && f.pending;
+            return (
+              <div key={f.id} className={cx("flex items-center gap-3 px-4 py-2 text-[13px]", pending ? "bg-[#eef9fd]" : f.triggered && "bg-warn-bg/40")}>
+                <span className="w-7 shrink-0 font-mono text-[12px] text-muted">{f.id}</span>
+                <span className={cx("flex-1", f.triggered && !pending ? "font-medium text-ink" : "text-ink-2")}>{f.label}</span>
+                <span className={cx("w-52 truncate text-right text-[12px]", pending ? "text-info-ink" : "text-muted")}>{pending ? f.pending : f.note}</span>
+                <span className={cx("w-8 text-right tabular-nums", pending ? "text-info-ink" : f.triggered ? "font-semibold text-warn-ink" : "text-faint")}>{pending ? "?" : f.triggered ? `+${f.weight}` : "0"}</span>
+              </div>
+            );
+          })}
         </div>
       </Card>
     </div>
   );
 }
 
-export function PaymentTab({ claim, status, decision, ready }: { claim: Claim; status: ClaimStatus; decision?: Decision; ready: boolean }) {
+export function PaymentTab({ claim, status, decision, ready, openDoc }: { claim: Claim; status: ClaimStatus; decision?: Decision; ready: boolean; openDoc: (t: DrawerTarget) => void }) {
   const p = claim.payment;
-  const id = decision?.payoutId ?? p.id;
+  const id = decision?.payoutId ?? (ready && status === "paid" ? p.id : "");
   const amount = decision?.action === "approved" ? decision.amount : p.amount;
   const exists = !!id && decision?.action !== "declined";
   const stateLabel = status === "paid" ? "Paid" : status === "approved" ? "In transit" : status === "declined" ? "Cancelled" : "Not created";
   const tone = status === "paid" ? "ok" : status === "approved" ? "info" : status === "declined" ? "bad" : "neutral";
   const event = {
     id: exists ? id : null,
-    object: "payout",
+    object: "transfer",
     amount: Math.round(amount * 100),
     currency: "gbp",
-    status: status === "paid" ? "paid" : status === "approved" ? "in_transit" : "not_created",
+    source: "Strype Assurance · claims balance",
     destination: p.payeeToken,
+    status: status === "paid" ? "paid" : status === "approved" ? "in_transit" : "not_created",
     statement_descriptor: p.reference,
-    metadata: { claim_id: claim.id, approved_by: decision?.by ?? (claim.route === "agent" ? "agent:T0" : null), evidence_pack: `ep_${claim.id.slice(-4)}_v1` },
+    metadata: { claim_id: claim.id, approved_by: decision?.by ?? (claim.route === "agent" ? "agent:T0" : null), evidence_pack: `ep_${claim.id.slice(-4)}_v${claim.episodes?.length ?? 1}` },
     livemode: false,
   };
+  const paidLines = claim.lines.filter((l) => l.payable > 0);
+  const citesFor = (line: number) =>
+    claim.findings.filter((f) => f.lines?.includes(line)).flatMap((f) => f.cites.map((c) => ({ ...c, tone: f.side === "for" ? ("for" as const) : f.side === "against" ? ("against" as const) : ("flag" as const) })));
+  const excess = claim.sections.reduce((n, s) => n + s.excess, 0);
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-5">
-      <Card>
-        <div className="border-b border-line p-5">
-          <div className="text-[12px] font-semibold uppercase tracking-wide text-muted">Payout</div>
-          <div className="mt-1 flex items-center gap-3">
-            <span className="text-[28px] font-semibold tabular-nums tracking-tight">{money(exists || status === "needs_review" ? amount : 0)}</span>
-            <span className="text-[14px] text-muted">GBP</span>
-            <Pill tone={tone} dot={status === "approved"}>{stateLabel}</Pill>
+    <div className="space-y-5">
+      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-5">
+        <Card>
+          <div className="border-b border-line p-5">
+            <div className="text-[12px] font-semibold uppercase tracking-wide text-muted">Transfer</div>
+            <div className="mt-1 flex items-center gap-3">
+              <span className="text-[28px] font-semibold tabular-nums tracking-tight">{money(amount)}</span>
+              <span className="text-[14px] text-muted">GBP</span>
+              <Pill tone={tone} dot={status === "approved"}>{stateLabel}</Pill>
+            </div>
+            {!exists && status === "needs_review" && <div className="mt-1 text-[13px] text-muted">Waiting for {claim.tier} approval.</div>}
+            {!exists && (status === "awaiting_evidence" || status === "triaging") && <div className="mt-1 text-[13px] text-muted">Held until the fraud screen is complete.</div>}
+            <div className="mt-4 flex items-center gap-3 text-[13px]">
+              <div className="min-w-0 flex-1 rounded-md border border-line px-3 py-2">
+                <div className="text-[11px] text-muted">From</div>
+                <div className="truncate font-medium text-ink">Strype Assurance</div>
+                <div className="text-[12px] text-muted">Claims balance</div>
+              </div>
+              <ArrowRight className="size-4 shrink-0 text-faint" />
+              <div className="min-w-0 flex-1 rounded-md border border-line px-3 py-2">
+                <div className="text-[11px] text-muted">To</div>
+                <div className="truncate font-medium text-ink">{p.payee}</div>
+                <div className="text-[12px] text-muted">{p.account} · verified</div>
+              </div>
+            </div>
           </div>
-          {!exists && status === "needs_review" && <div className="mt-1 text-[13px] text-muted">Waiting for {claim.tier} approval.</div>}
-          {!ready && <div className="mt-1 text-[13px] text-muted">Waiting for agents.</div>}
-        </div>
-        <div className="px-5 py-3">
-          <KV k="ID" v={exists ? <CopyId value={id} /> : "—"} />
-          <KV k="Payee" v={`${p.payee} · ${p.account}`} />
-          <KV k="Payee token" v={p.payeeToken} mono />
-          <KV k="Statement descriptor" v={p.reference} mono />
-          <KV k="Idempotency key" v={p.idempotencyKey} mono />
-          <KV k="Approved by" v={decision?.by ?? (p.approvedBy || "—")} />
-          <KV k="Created" v={decision?.at ?? p.created ?? "—"} />
-          {decision?.note && <KV k="Note" v={decision.note} />}
-        </div>
-      </Card>
+          <div className="px-5 py-3">
+            <KV k="ID" v={exists ? <CopyId value={id} /> : "—"} />
+            <KV k="Payee token" v={p.payeeToken} mono />
+            <KV k="Statement descriptor" v={p.reference} mono />
+            <KV k="Idempotency key" v={p.idempotencyKey} mono />
+            <KV k="Approved by" v={exists ? (decision?.by ?? p.approvedBy) : "—"} />
+            <KV k="Created" v={exists ? (decision?.at ?? p.created ?? "—") : "—"} />
+            {decision?.note && <KV k="Note" v={decision.note} />}
+          </div>
+        </Card>
+        <Card>
+          <CardHeader title="Event data" right={<span className="font-mono text-[12px]">{status === "paid" ? "transfer.paid" : exists ? "transfer.created" : "—"}</span>} />
+          <div className="p-4">
+            <pre className="overflow-x-auto rounded-md bg-[#0a2540] p-4 font-mono text-[12px] leading-relaxed text-[#c1c9d2]">{JSON.stringify(event, null, 2)}</pre>
+          </div>
+        </Card>
+      </div>
+
       <Card>
-        <CardHeader title="Event data" right={<span className="font-mono text-[12px]">{status === "paid" ? "payout.paid" : exists ? "payout.created" : "—"}</span>} />
-        <div className="p-4">
-          <pre className="overflow-x-auto rounded-md bg-[#0a2540] p-4 font-mono text-[12px] leading-relaxed text-[#c1c9d2]">{JSON.stringify(event, null, 2)}</pre>
-        </div>
+        <CardHeader title="Every pound" right={<span>{paidLines.length} paid lines · each traced to a clause and a document</span>} />
+        <table className="w-full text-[13px]">
+          <tbody>
+            {paidLines.map((l) => (
+              <tr key={l.line} className="border-b border-line-2">
+                <td className="w-14 px-4 py-2.5 tabular-nums text-muted">L{l.line}</td>
+                <td className="px-2 py-2.5 text-ink">{l.description}</td>
+                <td className="px-2 py-2.5">
+                  <div className="flex flex-wrap gap-1">
+                    {l.clauses.map((c) => (
+                      <Clause key={c} id={c} />
+                    ))}
+                  </div>
+                </td>
+                <td className="px-2 py-2.5">
+                  <div className="flex flex-wrap gap-1">
+                    {l.evidence.map((e) => (
+                      <DocChip key={e} id={e} onClick={() => openDoc({ doc: e, quotes: citesFor(l.line), title: `Line ${l.line} · ${l.description}` })} />
+                    ))}
+                  </div>
+                </td>
+                <td className="px-4 py-2.5 text-right font-semibold tabular-nums">{money(l.payable)}</td>
+              </tr>
+            ))}
+            {excess > 0 && (
+              <tr className="border-b border-line-2">
+                <td className="px-4 py-2.5 text-muted">—</td>
+                <td className="px-2 py-2.5 text-ink">Excess</td>
+                <td className="px-2 py-2.5">
+                  <Clause id="C5" />
+                </td>
+                <td />
+                <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-bad-ink">−{money(excess)}</td>
+              </tr>
+            )}
+            <tr className="bg-canvas">
+              <td colSpan={4} className="px-4 py-2.5 font-semibold">
+                Total transferred
+              </td>
+              <td className="px-4 py-2.5 text-right text-[15px] font-semibold tabular-nums">{money(claim.net)}</td>
+            </tr>
+          </tbody>
+        </table>
       </Card>
     </div>
   );

@@ -10,10 +10,11 @@ import { useAllClaimStates } from "@/lib/store";
 import type { ClaimStatus } from "@/lib/types";
 import { Card, Pill, Segmented, StatusPill, Tabs, cx } from "./ui";
 
-type View = "all" | "triaging" | "review" | "agent" | "paid" | "declined";
+type View = "all" | "waiting" | "triaging" | "review" | "agent" | "paid" | "declined";
 
 const VIEWS: { id: View; label: string; match: (s: ClaimStatus, route: string, human: boolean) => boolean }[] = [
   { id: "all", label: "All", match: () => true },
+  { id: "waiting", label: "Awaiting evidence", match: (s) => s === "awaiting_evidence" },
   { id: "triaging", label: "Triaging", match: (s) => s === "triaging" },
   { id: "review", label: "Needs review", match: (s) => s === "needs_review" },
   { id: "agent", label: "Auto-settled", match: (s, r, human) => s === "paid" && r === "agent" && !human },
@@ -118,6 +119,8 @@ export function ClaimsList() {
           <tbody>
             {rows.map(({ claim: c, status, elapsed }) => {
               const live = status === "triaging";
+              const waiting = status === "awaiting_evidence";
+              const outstanding = (c.requests ?? []).filter((r) => r.received === undefined || r.received === (c.episodes?.length ?? 0) - 1);
               const doneAgents = c.agents.filter((a) => agentState(a, elapsed) === "done").length;
               return (
                 <tr key={c.id} className="border-b border-line-2 last:border-b-0 hover:bg-canvas/70">
@@ -147,7 +150,9 @@ export function ClaimsList() {
                     )}
                   </td>
                   <td className="px-2 py-3">
-                    {live ? (
+                    {waiting ? (
+                      <span className="text-[12.5px] text-info-ink">Waiting on customer · {outstanding.length} item</span>
+                    ) : live ? (
                       <div className="flex items-center gap-2">
                         <div className="h-1.5 w-20 overflow-hidden rounded-full bg-line-2">
                           <div className="stripes-run h-full rounded-full bg-primary" style={{ width: `${(elapsed / c.runLength) * 100}%` }} />
@@ -157,14 +162,12 @@ export function ClaimsList() {
                         </span>
                       </div>
                     ) : (
-                      <span className="text-[12.5px] text-muted">
-                        {c.agents.length} · {clock(c.runLength)}
-                      </span>
+                      <span className="text-[12.5px] text-muted">{c.episodes ? `${c.episodes.length} runs over 2 weeks` : `${c.agents.length} · ${clock(c.runLength)}`}</span>
                     )}
                   </td>
                   <td className="px-2 py-3 text-right tabular-nums text-ink-2">{money(c.claimed)}</td>
                   <td className="px-2 py-3 text-right font-semibold tabular-nums">{live ? <span className="font-normal text-faint">—</span> : money(c.net)}</td>
-                  <td className="px-2 py-3">{live ? <span className="text-faint">—</span> : <Pill tone={c.fraudBand === "Green" ? "ok" : c.fraudBand === "Amber" ? "warn" : "bad"}>{c.fraudScore} {c.fraudBand}</Pill>}</td>
+                  <td className="px-2 py-3">{live ? <span className="text-faint">—</span> : waiting ? <Pill>Incomplete</Pill> : <Pill tone={c.fraudBand === "Green" ? "ok" : c.fraudBand === "Amber" ? "warn" : "bad"}>{c.fraudScore} {c.fraudBand}</Pill>}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right text-muted">{c.reported}</td>
                 </tr>
               );

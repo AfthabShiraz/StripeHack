@@ -40,6 +40,6 @@ export function citationCount(claim: Claim) {
 }
 
 export function childrenOf(claim: Claim) {
-  const order: Agent["kind"][] = ["orchestrator", "intake", "router", "extractor", "section", "consistency", "calculator", "decision", "payment"];
+  const order: Agent["kind"][] = ["orchestrator", "intake", "router", "extractor", "section", "consistency", "calculator", "decision", "payment", "comms"];
   return [...claim.agents].sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || a.start - b.start);
 }

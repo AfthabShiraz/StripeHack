@@ -1,5 +1,6 @@
 import { ArrowLeft, Globe } from "lucide-react";
 import Link from "next/link";
+import { TestMode } from "./test-mode";
 
 export function Topbar({ crumbs, back, right }: { crumbs: { label: string; href?: string }[]; back?: string; right?: React.ReactNode }) {
   return (
@@ -31,7 +32,7 @@ export function Topbar({ crumbs, back, right }: { crumbs: { label: string; href?
             <Globe className="size-3" />
             Europe/London · stored UTC
           </span>
-          <span className="rounded-[4px] bg-[#fff1e0] px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[#b54708]">Test mode</span>
+          <TestMode />
         </div>
       </div>
     </header>

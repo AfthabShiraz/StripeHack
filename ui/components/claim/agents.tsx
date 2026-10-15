@@ -12,7 +12,6 @@ import {
   Flag,
   GitBranch,
   Loader2,
-  RotateCcw,
   Search,
   ShieldCheck,
   Wrench,
@@ -23,10 +22,11 @@ import { agentEnd, agentState, childrenOf } from "@/lib/live";
 import { useStore } from "@/lib/store";
 import type { Agent, Claim, StepType, TraceStep } from "@/lib/types";
 import type { DrawerTarget } from "../doc-drawer";
-import { Button, Clause, Pill, cx } from "../ui";
+import { Clause, Pill, cx } from "../ui";
 
 const KIND_LABEL: Record<Agent["kind"], string> = {
   orchestrator: "Orchestrator",
+  comms: "Email",
   intake: "Coverage",
   router: "Router",
   extractor: "Evidence",
@@ -42,6 +42,7 @@ function barColor(a: Agent) {
   if (a.kind === "extractor" || a.kind === "router") return "bg-[#9b94ff]";
   if (a.kind === "calculator") return "bg-[#687385]";
   if (a.kind === "payment") return "bg-[#1ea672]";
+  if (a.kind === "comms") return "bg-[#d0478a]";
   return "bg-primary";
 }
 
@@ -98,7 +99,7 @@ function Waterfall({ claim, elapsed, selected, onSelect }: { claim: Claim; elaps
     return out;
   }, [total]);
   const nowPct = Math.min(100, (elapsed / total) * 100);
-  const live = Number.isFinite(elapsed) && elapsed < total;
+  const live = elapsed >= 0 && Number.isFinite(elapsed) && elapsed < total;
 
   return (
     <div className="overflow-hidden rounded-lg border border-line">
@@ -329,12 +330,31 @@ function TracePanel({ claim, agent, elapsed, openDoc, onFinding }: { claim: Clai
   );
 }
 
-export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim; elapsed: number; openDoc: (t: DrawerTarget) => void; onFinding: (id: string) => void }) {
-  const { replay } = useStore();
-  const live = Number.isFinite(elapsed);
-  const running = live && elapsed < claim.runLength;
+export function AgentsTab({
+  claim: base,
+  elapsed: liveElapsed,
+  run,
+  onRun,
+  openDoc,
+  onFinding,
+}: {
+  claim: Claim;
+  elapsed: number;
+  run?: number;
+  onRun?: (episode: number) => void;
+  openDoc: (t: DrawerTarget) => void;
+  onFinding: (id: string) => void;
+}) {
+  const { spawn } = useStore();
+  const episodes = base.episodes;
+  const liveIdx = episodes ? episodes.length - 1 : -1;
+  const runIdx = episodes ? (run ?? (liveElapsed < 0 ? liveIdx - 1 : liveIdx)) : -1;
+  const ep = episodes?.[runIdx];
+  const claim: Claim = ep ? { ...base, agents: ep.agents, runLength: ep.runLength } : base;
+  const elapsed = ep && runIdx !== liveIdx ? Number.POSITIVE_INFINITY : liveElapsed;
+  const running = elapsed >= 0 && Number.isFinite(elapsed) && elapsed < claim.runLength;
   const [selected, setSelected] = useState("orch");
-  const [follow, setFollow] = useState(running);
+  const [follow, setFollow] = useState(true);
 
   const latestRunning = useMemo(() => {
     const r = claim.agents.filter((a) => a.kind !== "orchestrator" && agentState(a, elapsed) === "running");
@@ -346,9 +366,55 @@ export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim
   const doneCount = claim.agents.filter((a) => agentState(a, elapsed) === "done").length;
   const runCount = claim.agents.filter((a) => agentState(a, elapsed) === "running").length;
   const tok = claim.agents.filter((a) => agentState(a, elapsed) !== "queued").reduce((n, a) => n + a.tokensIn + a.tokensOut, 0);
-  const shown = Math.min(elapsed, claim.runLength);
+  const shown = Math.max(0, Math.min(elapsed, claim.runLength));
 
   return (
+    <div className="space-y-4">
+      {episodes && (
+        <div className="flex gap-1.5 overflow-x-auto pb-1">
+          {episodes.map((e, i) => {
+            const hidden = i === liveIdx && liveElapsed < 0;
+            const isLiveRunning = i === liveIdx && liveElapsed >= 0 && liveElapsed < e.runLength;
+            return (
+              <button
+                key={e.id}
+                type="button"
+                disabled={hidden}
+                onClick={() => {
+                  onRun?.(i);
+                  setSelected("orch");
+                  setFollow(true);
+                }}
+                className={cx(
+                  "flex shrink-0 flex-col items-start rounded-md border px-3 py-1.5 text-left transition-colors disabled:cursor-not-allowed disabled:border-dashed disabled:opacity-50",
+                  i === runIdx ? "border-primary bg-primary-soft" : "border-line hover:bg-canvas",
+                )}
+              >
+                <span className={cx("flex items-center gap-1.5 text-[12px] font-semibold", i === runIdx ? "text-primary" : "text-ink")}>
+                  {isLiveRunning && <Loader2 className="size-3 animate-spin" />}
+                  Run {i + 1}
+                </span>
+                <span className="text-[11.5px] text-muted">{hidden ? "Waiting on customer" : e.at.replace(", now", " · now")}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {ep && (
+        <div className="flex items-center gap-2 text-[13px] text-ink-2">
+          <span className="font-semibold text-ink">{ep.label}</span>
+          {ep.docs.length > 0 && <span className="text-muted">· {ep.docs.join(", ")}</span>}
+        </div>
+      )}
+      {runIdx === liveIdx && liveElapsed < 0 ? (
+        <div className="rounded-lg border border-dashed border-line py-16 text-center">
+          <div className="text-[14px] font-medium text-ink">This run starts when the customer replies</div>
+          <button type="button" onClick={spawn} className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-md border border-[#ffc58a] px-3 text-[13px] font-medium text-[#b54708] hover:bg-[#fff6ec]">
+            <span className="rounded-[3px] bg-[#fff1e0] px-1 text-[10px] font-semibold uppercase tracking-wide">Test</span>
+            Simulate customer reply
+          </button>
+        </div>
+      ) : (
     <div className="space-y-4">
       <div className="flex items-center gap-6 text-[13px]">
         <div>
@@ -378,12 +444,6 @@ export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim
               Follow live
             </label>
           )}
-          {live && (
-            <Button size="sm" onClick={() => { replay(); setFollow(true); setSelected("orch"); }}>
-              <RotateCcw className="size-3.5" />
-              Replay run
-            </Button>
-          )}
         </div>
       </div>
       <div className="grid grid-cols-[minmax(0,1fr)_440px] gap-4">
@@ -395,6 +455,7 @@ export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim
             <span className="flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm bg-primary" />Reasoning</span>
             <span className="flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm bg-[#687385]" />Deterministic</span>
             <span className="flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm bg-[#1ea672]" />Stripe</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-3 rounded-sm bg-[#d0478a]" />Email</span>
             <span className="flex items-center gap-1.5"><span className="size-1.5 rotate-45 bg-[#ffcb57]" />Finding written</span>
           </div>
         </div>
@@ -402,6 +463,8 @@ export function AgentsTab({ claim, elapsed, openDoc, onFinding }: { claim: Claim
           <TracePanel claim={claim} agent={agent} elapsed={elapsed} openDoc={openDoc} onFinding={onFinding} />
         </div>
       </div>
+    </div>
+      )}
     </div>
   );
 }
