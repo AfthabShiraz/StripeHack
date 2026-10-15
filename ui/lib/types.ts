@@ -24,6 +24,7 @@ export interface Cite {
 }
 
 export type ClaimStatus =
+  | "awaiting_evidence"
   | "triaging"
   | "needs_review"
   | "auto_settled"
@@ -49,6 +50,8 @@ export interface LineItem {
 
 export interface Finding {
   id: string;
+  /** episode that wrote it (claims with an evidence timeline) */
+  episode?: number;
   side: "for" | "against" | "flag";
   title: string;
   detail: string;
@@ -92,7 +95,8 @@ export type AgentKind =
   | "consistency"
   | "calculator"
   | "decision"
-  | "payment";
+  | "payment"
+  | "comms";
 
 export interface Agent {
   id: string;
@@ -125,6 +129,8 @@ export interface AuthorityCheck {
   rule: string;
   pass: boolean;
   note: string;
+  /** cannot be checked until the live episode completes */
+  pending?: string;
 }
 
 export interface FraudIndicator {
@@ -133,6 +139,7 @@ export interface FraudIndicator {
   weight: number;
   triggered: boolean;
   note: string;
+  pending?: string;
 }
 
 export interface Payment {
@@ -150,10 +157,62 @@ export interface Payment {
 
 export interface LogEvent {
   id: string;
+  episode?: number;
   type: string;
   detail: string;
   actor: string;
   at: string;
+}
+
+export interface Stance {
+  reject: number;
+  partial: number;
+  full: number;
+  low: number;
+  high: number;
+  note: string;
+  blocker?: string;
+}
+
+/** One burst of activity on a claim: evidence arrives, agents wake, the orchestrator updates its view. */
+export interface Episode {
+  id: string;
+  at: string;
+  trigger: "opened" | "evidence" | "schedule";
+  label: string;
+  docs: string[];
+  agents: Agent[];
+  runLength: number;
+  summary: string;
+  stance: Stance;
+  facts: number;
+}
+
+export interface EvidenceRequest {
+  id: string;
+  item: string;
+  reason: string;
+  clause: string;
+  requested: number;
+  chased: number[];
+  received?: number;
+  docs: string[];
+}
+
+export interface Email {
+  id: string;
+  episode: number;
+  /** for the live episode: ms into the run when it appears */
+  t?: number;
+  direction: "out" | "in";
+  from: string;
+  to: string;
+  at: string;
+  subject: string;
+  body: string;
+  auto: boolean;
+  requests?: string[];
+  attachments?: string[];
 }
 
 export interface Claim {
@@ -193,4 +252,8 @@ export interface Claim {
   /** for live claims: total run length in ms */
   runLength: number;
   why: { q: string; a: string; cites: Cite[]; clauses: string[] }[];
+  /** evidence timeline. The last episode is triggered from the demo and its agents mirror `agents`. */
+  episodes?: Episode[];
+  requests?: EvidenceRequest[];
+  emails?: Email[];
 }
