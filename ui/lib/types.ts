@@ -153,6 +153,8 @@ export interface Payment {
   idempotencyKey: string;
   created?: string;
   approvedBy: string;
+  /** Stripe Dashboard link for a real test-mode transfer */
+  dashboardUrl?: string;
 }
 
 export interface LogEvent {
