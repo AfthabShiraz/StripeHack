@@ -1,0 +1,28 @@
+=============================================================
+          CLINICA MEDICA SERRA VERDE, LDA.
+     Av. Heliodoro Salgado 14, 2710-574 Sintra, Portugal
+     NIF: PT 515 902 336   ERS Registo n.: E-128844
+     Tel: +351 21 000 9330
+=============================================================
+FATURA-RECIBO                       N.: CMSV-FT 2026/3381
+Data: 16/09/2026                    Hora: 13:51
+-------------------------------------------------------------
+Utente:   Eleanor WHITCOMBE
+Data nasc.: 03/04/1991          Nacionalidade: Reino Unido
+Doc. ID:  Passaporte GB
+REGIME:   PARTICULAR (cartao GHIC/CESD nao apresentado)
+Medico:   Dra. Ines Carvalho  (Ced. Prof. OM 59114)
+-------------------------------------------------------------
+Cod.    Descricao                                    Valor
+-------------------------------------------------------------
+C-URG   Consulta de urgencia - adulto                75.00
+RX-TT2  RX tornozelo direito (2 incidencias)         95.00
+LIG-01  Ligadura funcional / imobilizacao            15.00
+-------------------------------------------------------------
+                                  TOTAL EUR         185.00
+                     Isento de IVA (art. 9.o CIVA)
+-------------------------------------------------------------
+Pagamento:  VISA ****4417   Aut. 663519    16/09/2026 13:51
+-------------------------------------------------------------
+     Documento processado por programa certificado n.o 0000/AT
+=============================================================

@@ -1,0 +1,39 @@
+### RECEIPT 1 (photo of printed taximeter receipt) ###
+
+TAXIS SINTRA - SERRA LDA
+NIF: PT 504 118 337   Alvara 2210
+Viatura: 44-XS-17   Motorista: 0081
+-----------------------------------
+Data: 16/09/2026
+Inicio: 12:31  Fim: 12:52
+Origem: Parque da Pena (portao)
+Destino: Av. Heliodoro Salgado, Sintra
+Tarifa 1 - Dist.: 6.1 km
+-----------------------------------
+Taximetro              14.20
+Suplemento chamada      0.80
+Bagagem/apoio           1.80
+-----------------------------------
+TOTAL EUR              16.80
+Pagamento: NUMERARIO (cash)
+-----------------------------------
+
+
+### RECEIPT 2 (photo of printed taximeter receipt) ###
+
+TAXIS SINTRA - SERRA LDA
+NIF: PT 504 118 337   Alvara 2210
+Viatura: 51-QR-90   Motorista: 0126
+-----------------------------------
+Data: 16/09/2026
+Inicio: 14:40  Fim: 15:24
+Origem: Av. Heliodoro Salgado, Sintra
+Destino: R. Miradouro da Graca, Lisboa
+Tarifa 1/2 - Dist.: 31.4 km
+-----------------------------------
+Taximetro              39.50
+Bagagem/apoio           1.80
+-----------------------------------
+TOTAL EUR              41.30
+Pagamento: NUMERARIO (cash)
+-----------------------------------

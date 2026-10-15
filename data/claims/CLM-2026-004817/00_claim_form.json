@@ -1,0 +1,78 @@
+{
+  "document_type": "online_claim_form",
+  "claim_id": "CLM-2026-004817",
+  "submitted_at": "2026-09-24T08:47:19Z",
+  "channel": "web",
+  "policy_number": "LRK-TRV-26-0071934",
+  "claimant": {
+    "name": "Eleanor Whitcombe",
+    "email": "eleanor.whitcombe@example.com",
+    "phone": "+44 7700 900418"
+  },
+  "trip": {
+    "destination": "Lisbon, Portugal",
+    "departed_uk": "2026-09-12",
+    "returned_uk": "2026-09-19",
+    "travelling_with": "Tom Ashdown (partner)"
+  },
+  "sections_claimed": [
+    {
+      "section": "Delayed baggage",
+      "incident_date": "2026-09-12",
+      "summary": "My suitcase didn't arrive at Lisbon on flight SA1472. The airline delivered it to the hotel the next evening. I had to buy clothes and essentials.",
+      "items": [
+        { "line": 1, "description": "Toiletries (Farmácia Estrela)", "date": "2026-09-12", "amount": 38.40, "currency": "EUR", "receipt_ref": "FE-2026-118734" },
+        { "line": 2, "description": "Clothes - underwear, t-shirts, shorts (Loja Tejo Moda)", "date": "2026-09-12", "amount": 86.50, "currency": "EUR", "receipt_ref": "LTM 0045-221907" },
+        { "line": 3, "description": "Swimsuit and sandals (Cais Beachwear)", "date": "2026-09-13", "amount": 84.90, "currency": "EUR", "receipt_ref": "CB/13092026/0311" },
+        { "line": 4, "description": "Phone charger + adaptor (TecnoBaixa)", "date": "2026-09-13", "amount": 29.99, "currency": "EUR", "receipt_ref": "TB-77120-4410" },
+        { "line": 5, "description": "Pharmacy items - shampoo, toothbrush etc", "date": "2026-09-12", "amount": 38.40, "currency": "EUR", "receipt_ref": "FE-2026-118734" },
+        { "line": 6, "description": "Light jacket (Alfama Linen Co.)", "date": "2026-09-14", "amount": 139.00, "currency": "EUR", "receipt_ref": "ALC-2026-05582" }
+      ]
+    },
+    {
+      "section": "Personal belongings",
+      "incident_date": "2026-09-15",
+      "summary": "My phone was stolen from my beach bag at Praia de Carcavelos while I was nearby. Reported to police the same day.",
+      "items": [
+        { "line": 7, "description": "Apple iPhone 15 128GB (replacement cost)", "date": "2026-09-15", "amount": 649.00, "currency": "GBP", "receipt_ref": "Original purchase receipt attached" }
+      ]
+    },
+    {
+      "section": "Medical expenses",
+      "incident_date": "2026-09-16",
+      "summary": "I twisted my ankle walking in Sintra and had to go to a clinic. The doctor said to rest for 3 days.",
+      "items": [
+        { "line": 8, "description": "Clinic consultation and X-ray (Clínica Médica Serra Verde)", "date": "2026-09-16", "amount": 185.00, "currency": "EUR", "receipt_ref": "CMSV-FT 2026/3381" },
+        { "line": 9, "description": "Pharmacy - medication and ankle support (Farmácia Central de Sintra)", "date": "2026-09-16", "amount": 42.15, "currency": "EUR", "receipt_ref": "FCS 2026/A/09921" },
+        { "line": 10, "description": "Taxi to clinic", "date": "2026-09-16", "amount": 16.80, "currency": "EUR", "receipt_ref": "Taxi receipt 1" },
+        { "line": 11, "description": "Taxi back to hotel in Lisbon", "date": "2026-09-16", "amount": 41.30, "currency": "EUR", "receipt_ref": "Taxi receipt 2" }
+      ]
+    },
+    {
+      "section": "Missed excursion",
+      "incident_date": "2026-09-17",
+      "summary": "We had a sunset boat trip booked for the 17th which I couldn't go on because of my ankle. The company won't refund.",
+      "items": [
+        { "line": 12, "description": "Tagus sunset cruise (Ribeira Boat Tours)", "date": "2026-09-17", "amount": 120.00, "currency": "EUR", "receipt_ref": "RBT-48213" }
+      ]
+    }
+  ],
+  "total_claimed_estimate_gbp": 1380.00,
+  "other_insurance": "No",
+  "carrier_compensation_received": "No",
+  "payment_details": {
+    "account_name": "Ms E Whitcombe",
+    "sort_code": "20-41-61",
+    "account_number": "53813092"
+  },
+  "declaration": {
+    "text": "I declare that the information I have given is true and complete to the best of my knowledge.",
+    "agreed": true,
+    "signed_name": "Eleanor Whitcombe",
+    "signed_at": "2026-09-24T08:47:02Z"
+  },
+  "attachments_uploaded": [
+    "E01", "E02", "E03", "E04", "E05", "E06", "E07", "E08", "E09", "E10", "E11",
+    "E13", "E14", "E15", "E16", "E17", "E18", "E19", "E20", "E21", "E22", "E23"
+  ]
+}

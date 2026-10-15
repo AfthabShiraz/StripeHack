@@ -1,0 +1,14 @@
+# Larkspur Assurance reference FX rates (document FX-REF). EUR -> GBP. Use only where no GBP debit is shown on a statement (CHG-TRV 7.1.2).
+date,currency,gbp_per_unit
+2026-08-28,EUR,0.8468
+2026-09-10,EUR,0.8509
+2026-09-11,EUR,0.8514
+2026-09-12,EUR,0.8520
+2026-09-13,EUR,0.8515
+2026-09-14,EUR,0.8531
+2026-09-15,EUR,0.8526
+2026-09-16,EUR,0.8540
+2026-09-17,EUR,0.8548
+2026-09-18,EUR,0.8544
+2026-09-19,EUR,0.8537
+2026-09-20,EUR,0.8541

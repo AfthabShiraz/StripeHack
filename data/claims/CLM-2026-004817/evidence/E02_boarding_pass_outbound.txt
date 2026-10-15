@@ -1,0 +1,16 @@
+=====================================================
+ SOLENT AIRWAYS            BOARDING PASS / CARTAO DE EMBARQUE
+=====================================================
+ NAME:      WHITCOMBE/ELEANOR MS
+ FLIGHT:    SA1472          DATE: 12SEP26
+ FROM:      LONDON GATWICK (LGW)
+ TO:        LISBON (LIS)
+ BOARDING:  09:05           GATE: 52
+ SEAT:      17C             GROUP: 3
+ BOOKING:   QX7R2M
+ SEQ:       088             BAGS: 1 PC / 23KG
+ BAG TAG:   SA 418772
+ ETKT:      6722190448811
+-----------------------------------------------------
+ Gate closes 20 minutes before departure.
+=====================================================

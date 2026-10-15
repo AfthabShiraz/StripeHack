@@ -1,0 +1,76 @@
+{
+  "record_type": "policy_admin_record",
+  "system": "Larkspur PolicyCore",
+  "extracted_at": "2026-09-24T09:12:44Z",
+  "policy_number": "LRK-TRV-26-0071934",
+  "product": "TRAVEL_SINGLE_TRIP",
+  "wording_reference": "TRV-2026 v1",
+  "cover_level": "SILVER",
+  "extensions": [],
+  "status": "ACTIVE",
+  "issue_date": "2026-08-20",
+  "trip_start": "2026-09-12",
+  "trip_end": "2026-09-19",
+  "destination_area": "AREA_1",
+  "destination_country": "PT",
+  "premium": {
+    "amount_gbp": 38.70,
+    "ipt_included": true,
+    "status": "PAID",
+    "paid_on": "2026-08-20",
+    "method": "CARD",
+    "card_last4": "4417"
+  },
+  "policyholder": {
+    "customer_id": "CUST-00418822",
+    "title": "Ms",
+    "first_name": "Eleanor",
+    "last_name": "Whitcombe",
+    "date_of_birth": "1991-04-03",
+    "email": "eleanor.whitcombe@example.com",
+    "phone": "+44 7700 900418",
+    "address": {
+      "line1": "14 Ashgrove Terrace",
+      "city": "Bristol",
+      "postcode": "BS6 5LQ",
+      "country": "GB"
+    },
+    "kyc_status": "VERIFIED",
+    "kyc_verified_on": "2024-05-11"
+  },
+  "insured_persons": [
+    {
+      "name": "Eleanor Whitcombe",
+      "date_of_birth": "1991-04-03",
+      "relationship": "POLICYHOLDER"
+    }
+  ],
+  "medical_declaration": {
+    "completed_on": "2026-08-20",
+    "conditions_declared": []
+  },
+  "verified_payee_account": {
+    "account_name": "MS E WHITCOMBE",
+    "sort_code_masked": "**-**-61",
+    "account_number_last4": "3092",
+    "payee_token": "payee_tok_8f3c2a91e4",
+    "verified_on": "2024-05-11",
+    "verification_method": "CONFIRMATION_OF_PAYEE_MATCH",
+    "last_changed_on": "2024-05-11"
+  },
+  "claims_history": [
+    {
+      "claim_id": "CLM-2024-001233",
+      "policy_number": "LRK-TRV-24-0039012",
+      "notified_on": "2024-05-09",
+      "section": "E",
+      "description": "Delayed baggage, Malaga, 26 hours",
+      "outcome": "SETTLED",
+      "paid_gbp": 181.40,
+      "closed_on": "2024-05-14"
+    }
+  ],
+  "flags": [],
+  "aca_payments_suspended": false,
+  "notes": "Fictional test record. All data synthetic."
+}
