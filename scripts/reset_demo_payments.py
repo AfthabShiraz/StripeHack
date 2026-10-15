@@ -28,26 +28,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from payments import stripe_payout as sp  # noqa: E402
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("claim_id")
-    parser.add_argument("--yes", action="store_true", help="apply the changes (default: dry run)")
-    args = parser.parse_args()
-
-    transfers = sorted(sp.claim_transfers(args.claim_id), key=lambda t: t.created)
-    if not transfers:
-        print(f"{args.claim_id}: no transfers in Stripe; nothing to reset.")
-        return
-
+def reset_claim_payments(claim_id: str, apply: bool) -> dict:
+    """Reverse and re-tag every transfer on the claim (dry run unless apply). Returns a summary."""
+    transfers = sorted(sp.claim_transfers(claim_id), key=lambda t: t.created)
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    total = 0
+    rows, total = [], 0
     for t in transfers:
-        meta = sp._meta(t)
         outstanding = t.amount - (t.amount_reversed or 0)
         total += outstanding
-        print(f"{t.id}  v{meta.get('decision_version', '?')}  £{sp.g.gbp(t.amount)}  "
-              f"to reverse £{sp.g.gbp(outstanding)}")
-        if not args.yes:
+        rows.append({"transfer_id": t.id, "version": sp._meta(t).get("decision_version"),
+                     "amount_gbp": sp.g.gbp(t.amount), "reversed_now_gbp": sp.g.gbp(outstanding)})
+        if not apply:
             continue
         if outstanding > 0:
             sp.client().v1.transfers.reversals.create(
@@ -56,17 +47,31 @@ def main() -> None:
                 {"idempotency_key": f"demo-reset-{t.id}-{outstanding}"},
             )
         sp.client().v1.transfers.update(t.id, {"metadata": {
-            "claim_id": f"{args.claim_id}#rehearsal",
-            "rehearsal_of": args.claim_id,
+            "claim_id": f"{claim_id}#rehearsal",
+            "rehearsal_of": claim_id,
             "reset_at": stamp,
         }})
+    return {"claim_id": claim_id, "applied": apply, "transfers": rows, "returned_gbp": sp.g.gbp(total)}
 
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("claim_id")
+    parser.add_argument("--yes", action="store_true", help="apply the changes (default: dry run)")
+    args = parser.parse_args()
+
+    out = reset_claim_payments(args.claim_id, args.yes)
+    if not out["transfers"]:
+        print(f"{args.claim_id}: no transfers in Stripe; nothing to reset.")
+        return
+    for r in out["transfers"]:
+        print(f"{r['transfer_id']}  v{r['version'] or '?'}  £{r['amount_gbp']}  to reverse £{r['reversed_now_gbp']}")
     if not args.yes:
-        print(f"\nDry run: {len(transfers)} transfer(s), £{sp.g.gbp(total)} to return to the float. "
+        print(f"\nDry run: {len(out['transfers'])} transfer(s), £{out['returned_gbp']} to return to the float. "
               "Re-run with --yes to apply.")
         return
     left = sp.claim_transfers(args.claim_id)
-    print(f"\nReset {len(transfers)} transfer(s); £{sp.g.gbp(total)} returned to the float. "
+    print(f"\nReset {len(out['transfers'])} transfer(s); £{out['returned_gbp']} returned to the float. "
           f"Transfers still on {args.claim_id}: {len(left)}. "
           f"Float available: £{sp.g.gbp(sp.float_available_pence())}")
 
