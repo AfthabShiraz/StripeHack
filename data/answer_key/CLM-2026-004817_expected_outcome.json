@@ -3,36 +3,274 @@
   "governing_wording": "TRV-2026 v1",
   "cover_level": "SILVER",
   "extensions": [],
-  "insured_persons": ["Eleanor Whitcombe"],
+  "insured_persons": [
+    "Eleanor Whitcombe"
+  ],
   "lines": [
-    { "line": 1,  "outcome": "PAY",         "payable_gbp": 32.86,  "clauses": ["E.1", "2.5"],                 "evidence": ["E04", "E05", "E06", "E21"] },
-    { "line": 2,  "outcome": "PAY",         "payable_gbp": 74.02,  "clauses": ["E.1", "2.5"],                 "evidence": ["E07", "E21"] },
-    { "line": 3,  "outcome": "PAY",         "payable_gbp": 72.61,  "clauses": ["E.1", "2.5"],                 "evidence": ["E08", "E21"] },
-    { "line": 4,  "outcome": "PAY",         "payable_gbp": 25.65,  "clauses": ["E.1", "2.5"],                 "evidence": ["E09", "E21"] },
-    { "line": 5,  "outcome": "DECLINE",     "payable_gbp": 0.00,   "clauses": ["CHG 7.4"],                    "evidence": ["E06"], "reason": "duplicate of line 1" },
-    { "line": 6,  "outcome": "DECLINE",     "payable_gbp": 0.00,   "clauses": ["E.4.1", "E.4.2"],             "evidence": ["E10", "E05"], "reason": "bought after baggage returned; non-essential" },
-    { "line": 7,  "outcome": "DECLINE",     "payable_gbp": 0.00,   "clauses": ["D.4.4", "D.4.5", "2.12"],     "evidence": ["CERT", "E12", "01"], "reason": "no gadget extension; left unattended" },
-    { "line": 8,  "outcome": "PAY",         "payable_gbp": 158.66, "clauses": ["C1.1"],                       "evidence": ["E15", "E16", "E21"] },
-    { "line": 9,  "outcome": "PAY_PARTIAL", "payable_gbp": 25.09,  "clauses": ["C1.2", "C7.2"],               "evidence": ["E16", "E17", "E21"], "reason": "sunscreen excluded" },
-    { "line": 10, "outcome": "PAY",         "payable_gbp": 14.35,  "clauses": ["C3"],                         "evidence": ["E18", "FX-REF"] },
-    { "line": 11, "outcome": "PAY",         "payable_gbp": 35.27,  "clauses": ["C3"],                         "evidence": ["E18", "FX-REF"] },
-    { "line": 12, "outcome": "PAY_PARTIAL", "payable_gbp": 51.69,  "clauses": ["B2.1", "B2.2", "B2.3(b)"],    "evidence": ["E16", "E19", "E20", "E21"], "reason": "insured person's share only" }
+    {
+      "line": 1,
+      "outcome": "PAY",
+      "payable_gbp": 32.86,
+      "clauses": [
+        "E.1",
+        "2.5"
+      ],
+      "evidence": [
+        "E04",
+        "E05",
+        "E06",
+        "E21"
+      ]
+    },
+    {
+      "line": 2,
+      "outcome": "PAY",
+      "payable_gbp": 74.02,
+      "clauses": [
+        "E.1",
+        "2.5"
+      ],
+      "evidence": [
+        "E07",
+        "E21"
+      ]
+    },
+    {
+      "line": 3,
+      "outcome": "PAY",
+      "payable_gbp": 72.61,
+      "clauses": [
+        "E.1",
+        "2.5"
+      ],
+      "evidence": [
+        "E08",
+        "E21"
+      ]
+    },
+    {
+      "line": 4,
+      "outcome": "PAY",
+      "payable_gbp": 25.65,
+      "clauses": [
+        "E.1",
+        "2.5"
+      ],
+      "evidence": [
+        "E09",
+        "E21"
+      ]
+    },
+    {
+      "line": 5,
+      "outcome": "DECLINE",
+      "payable_gbp": 0.0,
+      "clauses": [
+        "CHG 7.4"
+      ],
+      "evidence": [
+        "E06"
+      ],
+      "reason": "duplicate of line 1"
+    },
+    {
+      "line": 6,
+      "outcome": "DECLINE",
+      "payable_gbp": 0.0,
+      "clauses": [
+        "E.4.1",
+        "E.4.2"
+      ],
+      "evidence": [
+        "E10",
+        "E05"
+      ],
+      "reason": "bought after baggage returned; non-essential"
+    },
+    {
+      "line": 7,
+      "outcome": "DECLINE",
+      "payable_gbp": 0.0,
+      "clauses": [
+        "D.4.4",
+        "D.4.5",
+        "2.12"
+      ],
+      "evidence": [
+        "CERT",
+        "E12",
+        "01"
+      ],
+      "reason": "no gadget extension; left unattended"
+    },
+    {
+      "line": 8,
+      "outcome": "PAY",
+      "payable_gbp": 158.66,
+      "clauses": [
+        "C1.1"
+      ],
+      "evidence": [
+        "E15",
+        "E16",
+        "E21"
+      ]
+    },
+    {
+      "line": 9,
+      "outcome": "PAY_PARTIAL",
+      "payable_gbp": 25.09,
+      "clauses": [
+        "C1.2",
+        "C7.2"
+      ],
+      "evidence": [
+        "E16",
+        "E17",
+        "E21"
+      ],
+      "reason": "sunscreen excluded"
+    },
+    {
+      "line": 10,
+      "outcome": "PAY",
+      "payable_gbp": 14.35,
+      "clauses": [
+        "C3"
+      ],
+      "evidence": [
+        "E18a",
+        "FX-REF"
+      ]
+    },
+    {
+      "line": 11,
+      "outcome": "PAY",
+      "payable_gbp": 35.27,
+      "clauses": [
+        "C3"
+      ],
+      "evidence": [
+        "E18b",
+        "FX-REF"
+      ]
+    },
+    {
+      "line": 12,
+      "outcome": "PAY_PARTIAL",
+      "payable_gbp": 51.69,
+      "clauses": [
+        "B2.1",
+        "B2.2",
+        "B2.3(b)"
+      ],
+      "evidence": [
+        "E16",
+        "E19",
+        "E20",
+        "E21"
+      ],
+      "reason": "insured person's share only"
+    }
   ],
   "sections": {
-    "E":  { "eligible_gbp": 205.14, "excess_gbp": 0,   "net_gbp": 205.14 },
-    "C":  { "eligible_gbp": 233.37, "excess_gbp": 100, "net_gbp": 133.37 },
-    "B2": { "eligible_gbp": 51.69,  "excess_gbp": 0,   "net_gbp": 51.69 },
-    "D":  { "eligible_gbp": 0,      "excess_gbp": 0,   "net_gbp": 0 }
+    "E": {
+      "eligible_gbp": 205.14,
+      "excess_gbp": 0,
+      "net_gbp": 205.14
+    },
+    "C": {
+      "eligible_gbp": 233.37,
+      "excess_gbp": 100,
+      "net_gbp": 133.37
+    },
+    "B2": {
+      "eligible_gbp": 51.69,
+      "excess_gbp": 0,
+      "net_gbp": 51.69
+    },
+    "D": {
+      "eligible_gbp": 0,
+      "excess_gbp": 0,
+      "net_gbp": 0
+    }
   },
-  "net_payable_gbp": 390.20,
-  "fraud": { "triggered": ["F2", "F4", "F5"], "score": 30, "band": "AMBER", "qa_flag": true },
-  "authority": { "tier": "T0", "autonomous_payment_allowed": true, "failed_preconditions": [] },
+  "net_payable_gbp": 390.2,
+  "fraud": {
+    "triggered": [
+      "F2",
+      "F4",
+      "F5"
+    ],
+    "score": 30,
+    "band": "AMBER",
+    "qa_flag": true
+  },
+  "authority": {
+    "tier": "T0",
+    "autonomous_payment_allowed": true,
+    "failed_preconditions": []
+  },
   "overall_decision": "SETTLE",
   "payment": {
-    "amount_gbp": 390.20,
+    "amount_gbp": 390.2,
     "currency": "GBP",
     "payee_token": "payee_tok_8f3c2a91e4",
     "reference": "LARKSPUR CLM-2026-004817",
     "idempotency_key": "CLM-2026-004817-v1"
+  },
+  "irrelevant_documents": [
+    "E02",
+    "E03",
+    "E11",
+    "E22",
+    "E23",
+    "E24",
+    "E25",
+    "E26",
+    "E27",
+    "E28",
+    "E29",
+    "E30",
+    "E31",
+    "E32",
+    "E33",
+    "E34",
+    "E35",
+    "E36",
+    "E37",
+    "E38",
+    "E39",
+    "E40",
+    "E41",
+    "E42",
+    "E43"
+  ],
+  "document_filenames": {
+    "E18a": "E18a_taxi_receipts_16sep.pdf",
+    "E18b": "E18b_taxi_receipts_16sep.pdf",
+    "M01": "M01_email_thread_01.pdf",
+    "M02": "M02_email_thread_02.pdf",
+    "M03": "M03_email_thread_03.pdf",
+    "E24": "E24_return_boarding_pass.pdf",
+    "E25": "E25_hotel_wifi_card.pdf",
+    "E26": "E26_hotel_breakfast_leaflet.pdf",
+    "E27": "E27_airline_delay_apology_email.pdf",
+    "E28": "E28_boat_tours_marketing_email.pdf",
+    "E29": "E29_hotel_second_newsletter_email.pdf",
+    "E30": "E30_out_of_office_email.pdf",
+    "E31": "E31_personal_itinerary.pdf",
+    "E32": "E32_ankle_photo_description.pdf",
+    "E33": "E33_lifeguard_leaflet.pdf",
+    "E34": "E34_hotel_checkout_reminder_email.pdf",
+    "E35": "E35_airline_checkin_email.pdf",
+    "E36": "E36_hotel_linen_notice.pdf",
+    "E37": "E37_lisbon_walking_map.pdf",
+    "E38": "E38_sintra_visitor_leaflet.pdf",
+    "E39": "E39_hotel_tv_guide.pdf",
+    "E40": "E40_packing_checklist.pdf",
+    "E41": "E41_hotel_recycling_notice.pdf",
+    "E42": "E42_return_travel_notes.pdf",
+    "E43": "E43_hotel_library_catalogue.pdf"
   }
 }

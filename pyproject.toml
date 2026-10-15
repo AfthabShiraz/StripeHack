@@ -1,0 +1,21 @@
+[project]
+name = "claims-agent"
+version = "0.1.0"
+description = "Larkspur autonomous claims agent: Cognee memory + Gemini agents + Stripe test-mode payouts"
+requires-python = ">=3.12"
+dependencies = [
+    "cognee",
+    "google-genai",
+    "pydantic>=2",
+    "python-dotenv",
+    "stripe",
+    "streamlit",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"

@@ -1,0 +1,6 @@
+# PDF build scripts: Python 3.9+ standard library only.
+# PDF backend: macOS Cocoa / Core Graphics / Core Text via Swift (Xcode CLI tools).
+# Verification: Poppler's pdftotext, pdfinfo, pdftoppm on PATH.
+
+# payments/ (Stripe test-mode payouts)
+stripe==15.6.0

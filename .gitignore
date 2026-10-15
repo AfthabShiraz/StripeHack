@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.build/
+
+.env
+.cognee_system/
+.data_storage/
+*.db
+runs/
+.venv-claims/

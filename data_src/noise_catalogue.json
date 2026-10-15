@@ -1,0 +1,102 @@
+[
+  {
+    "doc_id": "E24",
+    "filename": "E24_return_boarding_pass.pdf",
+    "description": "Return boarding pass \u2014 Travel document only; no payment recorded."
+  },
+  {
+    "doc_id": "E25",
+    "filename": "E25_hotel_wifi_card.pdf",
+    "description": "Hotel Wi-Fi information card \u2014 Complimentary guest information; no charge."
+  },
+  {
+    "doc_id": "E26",
+    "filename": "E26_hotel_breakfast_leaflet.pdf",
+    "description": "Hotel breakfast information \u2014 Room-only bookings do not include breakfast. Ask reception for opening times and menus. This leaflet is informational and records no purchase."
+  },
+  {
+    "doc_id": "E27",
+    "filename": "E27_airline_delay_apology_email.pdf",
+    "description": "Baggage service apology \u2014 Your baggage file LISSA41872 is closed following delivery. We are sorry for the inconvenience. This service message does not confirm or promise any compensation or expense reimbursement."
+  },
+  {
+    "doc_id": "E28",
+    "filename": "E28_boat_tours_marketing_email.pdf",
+    "description": "Ribeira Boat Tours autumn newsletter \u2014 Browse our autumn river photography gallery and subscribe for seasonal news. This mailing is promotional only; it is not a booking, refund or voucher and makes no change to any existing reservation."
+  },
+  {
+    "doc_id": "E29",
+    "filename": "E29_hotel_second_newsletter_email.pdf",
+    "description": "Casa do Miradouro guest newsletter \u2014 This week in our reading room: a collection of Lisbon architectural sketches. Ask reception about the library. This newsletter records no guest attendance or purchase."
+  },
+  {
+    "doc_id": "E30",
+    "filename": "E30_out_of_office_email.pdf",
+    "description": "Eleanor automatic reply \u2014 Thank you for your message. I am on annual leave from 12 to 19 September 2026 and will read messages on my return. Eleanor Whitcombe."
+  },
+  {
+    "doc_id": "E31",
+    "filename": "E31_personal_itinerary.pdf",
+    "description": "Personal travel itinerary \u2014 Other activities subject to change. This planning sheet records no additional bookings or costs."
+  },
+  {
+    "doc_id": "E32",
+    "filename": "E32_ankle_photo_description.pdf",
+    "description": "Description accompanying ankle photograph \u2014 The photograph shows swelling around the outside of the right ankle with a bandage visible. No face or location sign appears in the image. This page is a text description only, not a clinical opinion or a new medical certificate."
+  },
+  {
+    "doc_id": "E33",
+    "filename": "E33_lifeguard_leaflet.pdf",
+    "description": "Beach station information leaflet \u2014 Ask the duty lifeguard about sea conditions before entering the water. Keep access lanes clear. Lost-property queries may be directed to the station. This leaflet records no witnessed incident, custody of property or statement about a particular visitor."
+  },
+  {
+    "doc_id": "E34",
+    "filename": "E34_hotel_checkout_reminder_email.pdf",
+    "description": "Departure reminder \u2014 Dear Ms Whitcombe, your scheduled departure is Saturday 19 September. Check-out is by 11:00. Please return your key at reception. This is a reminder, not a further invoice."
+  },
+  {
+    "doc_id": "E35",
+    "filename": "E35_airline_checkin_email.pdf",
+    "description": "Return flight check-in reminder \u2014 Your return flight SA1475 departs Lisbon on 19 September 2026 at 16:20 local time for London Gatwick. Please check your travel documents. This email records no additional fee or flight disruption."
+  },
+  {
+    "doc_id": "E36",
+    "filename": "E36_hotel_linen_notice.pdf",
+    "description": "Guest linen notice \u2014 Help us conserve water: leave towels on the rail to use them again. Contact reception if you need fresh linen. Complimentary housekeeping information; no charge or purchase recorded."
+  },
+  {
+    "doc_id": "E37",
+    "filename": "E37_lisbon_walking_map.pdf",
+    "description": "Lisbon neighbourhood map index \u2014 This text index accompanies a visitor map and is not evidence of a route taken, an admission ticket or a transport purchase."
+  },
+  {
+    "doc_id": "E38",
+    "filename": "E38_sintra_visitor_leaflet.pdf",
+    "description": "Sintra visitor leaflet \u2014 Historic paths may include uneven stone steps and gradients. Ask the visitor desk for accessible route information. This leaflet does not record attendance, ticket purchase or medical advice."
+  },
+  {
+    "doc_id": "E39",
+    "filename": "E39_hotel_tv_guide.pdf",
+    "description": "Hotel television guide \u2014 Use the remote guide button for channel listings. Subtitles depend on the programme. Reception can assist with remote controls. This is complimentary guest information."
+  },
+  {
+    "doc_id": "E40",
+    "filename": "E40_packing_checklist.pdf",
+    "description": "Personal packing checklist \u2014 This is a reminder list only and does not certify which bag held an item or record any purchase."
+  },
+  {
+    "doc_id": "E41",
+    "filename": "E41_hotel_recycling_notice.pdf",
+    "description": "Hotel recycling information \u2014 Paper and clean packaging may be placed in the labelled bins by reception. Please ask staff about glass recycling. Guest information only; no charge."
+  },
+  {
+    "doc_id": "E42",
+    "filename": "E42_return_travel_notes.pdf",
+    "description": "Return travel preparation notes \u2014 No expenses, treatment or additional service recorded."
+  },
+  {
+    "doc_id": "E43",
+    "filename": "E43_hotel_library_catalogue.pdf",
+    "description": "Hotel reading-room catalogue \u2014 Books are available to read in the lounge. This catalogue is not a borrowing record or purchase receipt."
+  }
+]

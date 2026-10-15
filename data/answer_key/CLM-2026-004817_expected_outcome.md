@@ -30,13 +30,13 @@ This is the ground truth for evaluating the pipeline. Everything here can be der
 | 2 | Loja Tejo Moda clothes | €86.50 | PAY | £74.02 | E.1, 2.5 | E06–E07, E21 | 12/09 16:41, inside window. Basic clothing. |
 | 3 | Cais Beachwear swimsuit + sandals | €84.90 | PAY | £72.61 | E.1, 2.5, CHG 8.1.3 | E08, E21 | 13/09 10:58, inside window. Swimwear/simple footwear essential on a coastal trip; both were in the delayed bag per PIR contents. |
 | 4 | TecnoBaixa charger + adaptor | €29.99 | PAY | £25.65 | E.1, 2.5 | E09, E21 | 13/09 12:26, inside window. Chargers/adaptors explicitly essential. |
-| 5 | Pharmacy items (same receipt FE-2026-118734) | €38.40 | DECLINE (duplicate) | £0.00 | CHG 7.4, OE-8 | E06, 02_email_thread | Same receipt number as line 1. Claimant acknowledged it in email 29/09. Triggers F4. |
+| 5 | Pharmacy items (same receipt FE-2026-118734) | €38.40 | DECLINE (duplicate) | £0.00 | CHG 7.4, OE-8 | E06, M02_email_thread_02.pdf | Same receipt number as line 1. Claimant acknowledged it in email 29/09. Triggers F4. |
 | 6 | Alfama Linen jacket | €139.00 | DECLINE | £0.00 | **E.4.1** (primary), E.4.2, OE-1/OE-2 | E10 (14/09 11:37), E05 (bag returned 13/09 19:20), E22 front-desk log | Bought after bag was returned. Also a handmade fashion jacket, not an essential item. |
 | 7 | iPhone 15 | £649.00 | DECLINE | £0.00 | **D.4.4** (no Gadget extension), **D.4.5 + def. 2.12** (unattended), OE-3, OE-4 | Certificate ("Gadget extension: NOT purchased"); E12 original: *"deixou o seu saco de praia sobre a toalha, na areia, sem vigilância, enquanto nadava no mar … a uma distância aproximada de 40 (quarenta) metros"*; 01 statement ("we went for a swim together … about 20 minutes") | Two independent grounds. Must quote the **original** Portuguese report, not the claimant's translation (E13), which drops "sem vigilância" and "40 metros". Triggers F2 and F5. Counterfactual if covered: £699 × 70% (1–2 yrs, CHG 7.6) = £489.30 → capped at £300 single-article → minus £75 excess = £225. |
 | 8 | Clinic consultation + X-ray + bandage | €185.00 | PAY | £158.66 | C1.1, GC.5 | E15, E16, E21 | Private patient; GHIC not used → excess NOT waived (C6, CHG 8.3.2). |
 | 9 | Farmácia Central de Sintra | €42.15 | PAY_PARTIAL | £25.09 | C1.2, **C7.2**, CHG 7.2.2, OE-6 | E16 (doctor recommended diclofenac gel + ankle support), E17, E21 | Gel €9.85 + support €19.40 = €29.25 eligible; sunscreen €12.90 excluded. £36.15 × 29.25/42.15 = £25.09. |
-| 10 | Taxi Pena → clinic (cash) | €16.80 | PAY | £14.35 | C3, CHG 7.1.2 | E18, FX-REF 16/09 0.8540 | Cash — no statement line, so FX reference rate. |
-| 11 | Taxi clinic → hotel Lisbon (cash) | €41.30 | PAY | £35.27 | C3, CHG 7.1.2 | E18, FX-REF | C3 total £49.62 < £100 sub-limit. |
+| 10 | Taxi Pena → clinic (cash) | €16.80 | PAY | £14.35 | C3, CHG 7.1.2 | E18a, FX-REF 16/09 0.8540 | Cash — no statement line, so FX reference rate. |
+| 11 | Taxi clinic → hotel Lisbon (cash) | €41.30 | PAY | £35.27 | C3, CHG 7.1.2 | E18b, FX-REF | C3 total £49.62 < £100 sub-limit. |
 | 12 | Tagus sunset cruise | €120.00 | PAY_PARTIAL | £51.69 | **B2.1, B2.2, B2.3(b)**, 1.3, CHG 7.3.2, OE-7 | E16 (restriction until 19/09 13:20 covers 17/09 18:30), E19 (2 adults, booked 28/08 — before injury), E20 (non-refundable in writing), E21 (£103.38 debited) | Only Eleanor's share: £103.38 / 2. Tom's ticket excluded. No excess on B2. |
 
 ## Settlement calculation
@@ -68,12 +68,12 @@ This is the ground truth for evaluating the pipeline. Everything here can be der
 
 ## Authority check (SAP-01 §3)
 
-P1 £390.20 ≤ £1,000 ✓ · P2 active/paid/in period ✓ · P3 named insured, notified in 5 days ✓ · P4 wording from Certificate ✓ · P5 mandatory docs present for all paid lines (E: PIR E04 + delivery E05 + receipts; C: E16 + E15 + E17 + E18 + E21; B2: E19 + E20 + E21 + E16) ✓ · P6 score 30 < 40 ✓ (QA flag) · P7 no in-patient/H/I ✓ · P8 payee matches verified account, unchanged since 2024 ✓ · P9 every line cites clause + doc ✓ · P10 partial declines all ≤ £1,000, all Objective Exclusions, ≥1 line paid ✓.
+P1 £390.20 ≤ £1,000 ✓ · P2 active/paid/in period ✓ · P3 named insured, notified in 5 days ✓ · P4 wording from Certificate ✓ · P5 mandatory docs present for all paid lines (E: PIR E04 + delivery E05 + receipts; C: E16 + E15 + E17 + E18a + E18b + E21; B2: E19 + E20 + E21 + E16) ✓ · P6 score 30 < 40 ✓ (QA flag) · P7 no in-patient/H/I ✓ · P8 payee matches verified account, unchanged since 2024 ✓ · P9 every line cites clause + doc ✓ · P10 partial declines all ≤ £1,000, all Objective Exclusions, ≥1 line paid ✓.
 
 ## Other things a strong system notices (no effect on payout)
 
 - **Recovery opportunity (GC.4):** E04/E05 say Solent Airways accepts interim-expense claims within 21 days. Larkspur may pursue recovery of the £205.14 from the carrier. Claimant declared no carrier compensation received.
-- **Irrelevant documents:** E02 boarding pass (corroborates bag tag only), E03 hotel booking, E11 restaurant receipt, E22 hotel invoice (but its front-desk log corroborates the 19:20 delivery), E23 newsletter, plus non-claim lines on E21.
+- **Irrelevant documents:** E02 boarding pass (corroborates bag tag only), E03 hotel booking, E11 restaurant receipt, E22 hotel invoice (but its front-desk log corroborates the 19:20 delivery), E23 newsletter, plus non-claim lines on E21. New irrelevant/corroborating documents: E24 (`E24_return_boarding_pass.pdf`), E25 (`E25_hotel_wifi_card.pdf`), E26 (`E26_hotel_breakfast_leaflet.pdf`), E27 (`E27_airline_delay_apology_email.pdf`), E28 (`E28_boat_tours_marketing_email.pdf`), E29 (`E29_hotel_second_newsletter_email.pdf`), E30 (`E30_out_of_office_email.pdf`), E31 (`E31_personal_itinerary.pdf`), E32 (`E32_ankle_photo_description.pdf`), E33 (`E33_lifeguard_leaflet.pdf`), E34 (`E34_hotel_checkout_reminder_email.pdf`), E35 (`E35_airline_checkin_email.pdf`), E36 (`E36_hotel_linen_notice.pdf`), E37 (`E37_lisbon_walking_map.pdf`), E38 (`E38_sintra_visitor_leaflet.pdf`), E39 (`E39_hotel_tv_guide.pdf`), E40 (`E40_packing_checklist.pdf`), E41 (`E41_hotel_recycling_notice.pdf`), E42 (`E42_return_travel_notes.pdf`), E43 (`E43_hotel_library_catalogue.pdf`).
 - **Brochure conflict:** brochure says "phones protected wherever you go" and "up to £400" for delayed bags. Not contractual (wording §preamble, CHG 4.3). Must not grant cover.
 - **Medical certificate fit-to-fly** — no curtailment or repatriation issue.
 - **Decision letter (LTR-02)** must not mention fraud score or QA flag, and must invite Eleanor to provide further information on the phone decline.
@@ -91,3 +91,7 @@ P1 £390.20 ≤ £1,000 ✓ · P2 active/paid/in period ✓ · P3 named insured,
 | Used FX table instead of GBP debited for card transactions (Section E only) | £389.31 |
 | Phone paid at counterfactual £225 (missed both exclusions) | £615.20 |
 | GHIC excess wrongly waived | £490.20 |
+
+## Source filename changes
+
+E18 is split into `E18a_taxi_receipts_16sep.pdf` (Pena to clinic) and `E18b_taxi_receipts_16sep.pdf` (clinic to hotel). The email thread is split into `M01_email_thread_01.pdf`, `M02_email_thread_02.pdf` and `M03_email_thread_03.pdf`; M02 contains the duplicate-receipt acknowledgement. Other evidence keeps its original filename stem with a `.pdf` extension.
