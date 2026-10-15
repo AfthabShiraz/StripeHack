@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claims console UI
 
-## Getting Started
-
-First, run the development server:
+Frontend only. All data is mock, built from the synthetic Larkspur case in `/data`.
 
 ```bash
+cd ui
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` Home: paid out by agents vs people, review queue, live run
+- `/claims` Claims list, with Review queue and Live triage views
+- `/claims/[id]` Claim review: For/Against findings with cited highlights, agent waterfall and traces, line items, authority, payout, logs, Ask why
+- `/payouts` Payout ledger
+- `/library` Policy documents
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Mock claims
 
-## Learn More
+| Claim | Outcome |
+|---|---|
+| CLM-2026-004833 | Paid in full by agent |
+| CLM-2026-004817 | Paid in part by agent (from `/data`) |
+| CLM-2026-004791 | Decline recommended, needs a person |
+| CLM-2026-004861 | Live: agents run on page load (~84s), then needs a person to approve over £1,000 |
 
-To learn more about Next.js, take a look at the following resources:
+## Where to plug in the backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `lib/types.ts` is the shape the UI expects for a claim, its agents, trace steps, findings and citations.
+- `lib/data/` holds the mock claims. Replace `getClaim` / `CLAIMS` with API calls.
+- `lib/store.tsx` holds the live-run clock and reviewer decisions. Swap for real events and a Stripe payout call.
+- A citation is `{ doc, quote }`. The viewer highlights `quote` wherever it appears verbatim in document `doc`.
+- `lib/data/generated-docs.ts` is generated from `/data`.
